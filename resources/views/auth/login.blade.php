@@ -1,6 +1,5 @@
 <x-guest-layout>
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
     <div class="container hi row justify-content-center">
         <div class="main form rounded-4 p-1 pt-2 col-12 col-md-8 col-lg-6 col-xl-4">
             <img src="{{ asset('../resources/img/SUT_Logo-removebg-preview.png') }}" alt="Sut logo" width="200px">
@@ -25,6 +24,7 @@
                     </div>
                 </div>
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                <x-auth-session-status class="mb-4" :status="session('status')" />
 
                 <!-- Password Input -->
                 <div class="input-group flex-nowrap w-75 mt-4">

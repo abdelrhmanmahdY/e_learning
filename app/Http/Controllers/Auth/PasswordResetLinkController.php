@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -15,6 +16,7 @@ class PasswordResetLinkController extends Controller
      */
     public function create(): View
     {
+
         return view('auth.forgot-password');
     }
 
@@ -25,20 +27,24 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
+        // Validate the email input
+        $request->validate(['email' => 'required|email']);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
+        // Send the reset link
         $status = Password::sendResetLink(
             $request->only('email')
         );
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+        // Redirect to the reset password page if the link was sent
+        if ($status == Password::RESET_LINK_SENT) {
+            // Find the user and create a token
+            $user = User::where('email', $request->email)->first();
+            $token = Password::createToken($user);
+
+            // Redirect to the reset password form with the token
+            return redirect()->route('password.reset', ['token' => $token, 'email' => $request->email]);
+        }
+
+        return back()->withErrors(['email' => __($status)]);
     }
 }
