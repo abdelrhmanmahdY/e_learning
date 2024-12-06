@@ -12,6 +12,12 @@ Route::get('/dashboard', function () {
 Route::get('/users', function () {
     return view('user.index');
 })->middleware(['auth', 'verified'])->name('user.index');
+Route::get('/books', function () {
+    return view('book.index');
+})->middleware(['auth', 'verified'])->name('book.index');
+Route::get('/libraries', function () {
+    return view('library.index');
+})->middleware(['auth', 'verified'])->name('library.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
