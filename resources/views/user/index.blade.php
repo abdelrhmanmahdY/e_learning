@@ -5,92 +5,155 @@
                 class="mb-0 d-flex justify-content-center align-items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Users') }}
             </h2>
-            <button class="btn btn-primary">Create</button>
+            <button x-data='' x-on:click.prevent="$dispatch('open-modal',
+        'user-create')"
+                class="btn
+                btn-primary">Create</button>
         </div>
-    </x-slot>
-    <x-slot name="slot">
-        <div class="container text-center mt-3">
-            <div class="row row-cols-4 ms-5  gap-5">
-                <div class="card col rounded-circle" style="width:150px ;height:150px;">
-                    <button x-data='' x-on:click.prevent="$dispatch('open-modal',
-        'user-info')">
-                        <img src="../resources/img/images.webp" style="width:120px ;height:150px;"
-                            class="card-img-top rounded-circle" alt="...">
-                        <b>Messi</b>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <x-modal name="user-info">
-            <x-table>
-                <x-slot name="tableHead">
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-
-                </x-slot>
-                <x-slot name="tableBody">
-                    <td>Messi</td>
-                    <td>Messi.com</td>
-                    <td>Player</td>
-                </x-slot></x-table>
-
-            <div class="d-flex justify-content-center">
-                <button class="btn btn-danger mb-4" x-data=''
-                    x-on:click.prevent="() => { $dispatch('close'); $dispatch('open-modal', 'user-deletion'); }">Delete</button>
-                <button class="btn btn-warning ms-3 mb-4"
-                    x-on:click.prevent="()=> {  $dispatch('close'); $dispatch('open-modal','user-edit');}">Edit</button>
-            </div>
-
-        </x-modal>
-
-        <x-modal name="user-deletion">
-            <form method="post" class="p-6">
-                @csrf
-
-
-                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    {{ __('Are you sure you want to delete This User?') }}
-                </h2>
-
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ __('Once This User is deleted, all of its resources and data will be permanently deleted.') }}
-                </p>
-
-
-
-                <div class="mt-6 flex justify-center">
-                    <x-secondary-button x-on:click.prevent="()=>$dispatch('close');$dispatch('open-modal','user-info')">
-                        {{ __('Cancel') }}
-                    </x-secondary-button>
-
-                    <x-danger-button class="ms-3">
-                        {{ __('Delete User') }}
-                    </x-danger-button>
-                </div>
-            </form>
-        </x-modal>
-        <x-modal name="user-edit">
+        <x-modal name="user-create">
             <form action="" method="post">
-                @csrf
                 <x-table>
                     <x-slot name="tableHead">
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Password</th>
                         <th>Role</th>
+                        <th>Photo</th>
 
                     </x-slot>
                     <x-slot name="tableBody">
-                        <td><x-text-input style="border: none" /></td>
-                        <td><x-text-input style="border: none" /></td>
-                        <td><x-text-input style="border: none" /></td>
-                    </x-slot></x-table>
+                        <td> <x-text-input type="text" maxlength="12" autocomplete="name" name="name"
+                                class="form-control name" placeholder="UserName" id="name" autofocus required
+                                :value="old('name')" /></td>
+                        <td> <x-text-input id="email" class="form-control email" type="email" name="email"
+                                :value="old('email')" required autocomplete="username" />
+                        </td>
+                        <td> <x-text-input id="password" class="form-control password" type="password" name="password"
+                                required autocomplete="new-password" />
+                        </td>
+                        <td><select name="role" class="form-select" style="width:110px">
+                                <option selected value="student">Student</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </td>
+                        <td>
+                            <x-text-input style="width:110px" id="photo" name="photo" type="file"
+                                class="form-control" accept="image/*" />
+
+                        </td>
+
+
+                    </x-slot>
+                </x-table>
+
+                <x-input-error class="mt-2" :messages="$errors->get('photo')" />
+                <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                <x-input-error :messages="$errors->get('role')" class="mt-2" />
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-warning mb-3">Confirm</button>
+                    <button class="btn btn-primary mb-3">Create</button>
                 </div>
             </form>
+
         </x-modal>
     </x-slot>
+    <x-slot name="slot">
+        <div class="container text-center mt-3">
+            <div class="row row-cols-4 ms-1   gap-5">
+                @foreach ($users as $user)
+                    <div class="card col rounded-circle p-0" style="width:150px ;height:150px;">
+                        <button x-data='' x-on:click.prevent="$dispatch('open-modal',
+        'user-info')">
+                            <img src="storage/{{ $user->photo }}" style="width:150px"
+                                class="card-img-top rounded-circle" alt="...">
+                        </button>
+                        <b>{{ $user->name }}</b>
+                        <x-modal name="user-info">
+                            <x-table>
+                                <x-slot name="tableHead">
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
 
+                                </x-slot>
+                                <x-slot name="tableBody">
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->role }}</td>
+                                </x-slot></x-table>
+
+                            <div class="d-flex justify-content-center">
+                                <button class="btn btn-danger mb-4" x-data=''
+                                    x-on:click.prevent="() => { $dispatch('close'); $dispatch('open-modal', 'user-deletion'); }">Delete</button>
+                                <button class="btn btn-warning ms-3 mb-4"
+                                    x-on:click.prevent="()=> {  $dispatch('close'); $dispatch('open-modal','user-edit');}">Edit</button>
+                            </div>
+
+                        </x-modal>
+
+                        <x-modal name="user-deletion">
+                            <form method="post" class="p-6">
+                                @csrf
+                                @method('DELETE')
+
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    {{ __('Are you sure you want to delete This User?') }}
+                                </h2>
+
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ __('Once This User is deleted, all of its resources and data will be permanently deleted.') }}
+                                </p>
+
+
+
+                                <div class="mt-6 flex justify-center">
+                                    <x-secondary-button
+                                        x-on:click.prevent="()=>$dispatch('close');$dispatch('open-modal','user-info')">
+                                        {{ __('Cancel') }}
+                                    </x-secondary-button>
+
+                                    <x-danger-button class="ms-3">
+                                        {{ __('Delete User') }}
+                                    </x-danger-button>
+                                </div>
+                            </form>
+                        </x-modal>
+                        <x-modal name="user-edit">
+                            <form action="" method="post">
+                                @csrf
+                                @method('PUT')
+                                <x-table>
+                                    <x-slot name="tableHead">
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+
+                                    </x-slot>
+                                    <x-slot name="tableBody">
+                                        <td><x-text-input value="{{ $user->name }}" style="border: none" /></td>
+                                        <td><x-text-input value="{{ $user->email }}" style="border: none" /></td>
+                                        <td><select name="role" class="form-select" style="width:196px; height:40px">
+                                                <option selected value="student">Student</option>
+                                                <option value="admin">Admin</option>
+                                            </select>
+                                        </td>
+                                    </x-slot></x-table>
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-warning mb-3">Confirm</button>
+                                </div>
+                            </form>
+                        </x-modal>
+
+                    </div>
+                @endforeach
+
+
+            </div>
+        </div>
+
+
+
+    </x-slot>
 
 </x-app-layout>

@@ -18,9 +18,7 @@
                     <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
                         {{ __('Users') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('library.index')" :active="request()->routeIs('library.index')">
-                        {{ __('Libraries') }}
-                    </x-nav-link>
+
                     <x-nav-link :href="route('book.index')" :active="request()->routeIs('book.index')">
                         {{ __('Books') }}
                     </x-nav-link>
@@ -29,6 +27,8 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <div class=" rounded-circle me-2 overflow-hidden" style="width:50px;height:50px; background-color:#f3f4f6"><img
+                        src="storage/{{ Auth::user()->photo }}" alt=""></div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
@@ -86,6 +86,12 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
+                {{ __('Users') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('book.index')" :active="request()->routeIs('book.index')">
+                {{ __('Books') }}
             </x-responsive-nav-link>
         </div>
 

@@ -152,6 +152,8 @@ class ResponseFactory implements FactoryContract
      * @param  array  $headers
      * @param  string|null  $disposition
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     *
+     * @throws \Illuminate\Routing\Exceptions\StreamedResponseException
      */
     public function streamDownload($callback, $name = null, array $headers = [], $disposition = 'attachment')
     {
@@ -236,7 +238,7 @@ class ResponseFactory implements FactoryContract
     /**
      * Create a new redirect response to a named route.
      *
-     * @param  string  $route
+     * @param  \BackedEnum|string  $route
      * @param  mixed  $parameters
      * @param  int  $status
      * @param  array  $headers

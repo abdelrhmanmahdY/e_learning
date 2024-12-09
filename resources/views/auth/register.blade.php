@@ -4,7 +4,7 @@
             <img src="{{ asset('../resources/img/SUT_Logo-removebg-preview.png') }}" alt="mcv logo" width="200px">
 
             <form class="d-flex flex-column align-items-center was-validated" id="signupform"
-                action="{{ route('register') }}" method="post" name="signUp">
+                action="{{ route('register') }}" method="post" name="signUp" enctype="multipart/form-data">
                 @csrf
 
                 <h3 class="text-center mt-3 heading fw-bold loginText">Sign Up</h3>
@@ -15,8 +15,9 @@
                         <i class="fa-solid fa-user"></i>
                     </span>
                     <div class="form-floating">
-                        <x-text-input type="text" autocomplete="name" name="name" class="form-control name"
-                            placeholder="UserName" id="name" autofocus required :value="old('name')" />
+                        <x-text-input type="text" maxlength="12" autocomplete="name" name="name"
+                            class="form-control name" placeholder="UserName" id="name" autofocus required
+                            :value="old('name')" />
                         <x-input-label for="name" :value="__('Name')" />
                     </div>
                 </div>
@@ -60,36 +61,16 @@
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
 
 
-                <!-- Department & Birth Date -->
                 <div class="input-group input-group-lg w-75 mt-4">
-                    <div class="form-floating me-3">
-                        <select name="department" class="form-select" aria-required="true" id="dropdown">
-                            <option value="" disabled selected>......</option>
-                            @if (isset($departments) && $departments->count())
-                                @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}"
-                                        {{ old('department') == $department->id ? 'selected' : '' }}>
-                                        {{ $department->name }}
-                                    </option>
-                                @endforeach
-                            @else
-                                <option value="0" disabled>No departments available</option>
-                            @endif
-                        </select>
-                        <label for="dropdown">Department</label>
-                    </div>
+                    <span class="input-group-text" id="inputGroup-sizing-lg"><i class="fa-solid fa-image"></i></span>
                     <div class="form-floating">
-                        <input type="date" name="date_of_birth" aria-required="true" id="date"
-                            class="form-control" value="{{ old('date_of_birth') }}">
-                        <label for="date">Birth Day</label>
+                        <x-text-input id="photo" class="form-control" type="file" name="photo"
+                            accept="image/*" />
+                        <x-input-label for="photo" :value="__('Profile Photo')" />
                     </div>
                 </div>
-                @error('department')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-                @error('date_of_birth')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
+                <x-input-error :messages="$errors->get('photo')" class="mt-2" />
+
 
                 <!-- Submit Button -->
                 <x-primary-button>

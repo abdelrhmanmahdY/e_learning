@@ -3,6 +3,7 @@
 namespace Illuminate\Http\Client;
 
 use Closure;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -39,7 +40,7 @@ class Factory
     /**
      * The options to apply to every request.
      *
-     * @var array
+     * @var \Closure|array
      */
     protected $globalOptions = [];
 
@@ -133,7 +134,7 @@ class Factory
     /**
      * Set the options to apply to every request.
      *
-     * @param  array  $options
+     * @param  \Closure|array  $options
      * @return $this
      */
     public function globalOptions($options)
@@ -162,6 +163,22 @@ class Factory
         $response = new Psr7Response($status, $headers, $body);
 
         return Create::promiseFor($response);
+    }
+
+    /**
+     * Create a new connection exception for use during stubbing.
+     *
+     * @param  string|null  $message
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public static function failedConnection($message = null)
+    {
+        return function ($request) use ($message) {
+            return Create::rejectionFor(new ConnectException(
+                $message ?? "cURL error 6: Could not resolve host: {$request->toPsrRequest()->getUri()->getHost()} (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for {$request->toPsrRequest()->getUri()}.",
+                $request->toPsrRequest(),
+            ));
+        };
     }
 
     /**
@@ -203,9 +220,11 @@ class Factory
 
         $this->stubCallbacks = $this->stubCallbacks->merge(collect([
             function ($request, $options) use ($callback) {
-                $response = $callback instanceof Closure
-                                ? $callback($request, $options)
-                                : $callback;
+                $response = $callback;
+
+                while ($response instanceof Closure) {
+                    $response = $response($request, $options);
+                }
 
                 if ($response instanceof PromiseInterface) {
                     $options['on_stats'](new TransferStats(
@@ -238,7 +257,7 @@ class Factory
      * Stub the given URL using the given callback.
      *
      * @param  string  $url
-     * @param  \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface|callable  $callback
+     * @param  \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface|callable|int|string|array  $callback
      * @return $this
      */
     public function stubUrl($url, $callback)
@@ -248,9 +267,19 @@ class Factory
                 return;
             }
 
-            return $callback instanceof Closure || $callback instanceof ResponseSequence
-                        ? $callback($request, $options)
-                        : $callback;
+            if (is_int($callback) && $callback >= 100 && $callback < 600) {
+                return static::response(status: $callback);
+            }
+
+            if (is_int($callback) || is_string($callback)) {
+                return static::response($callback);
+            }
+
+            if ($callback instanceof Closure || $callback instanceof ResponseSequence) {
+                return $callback($request, $options);
+            }
+
+            return $callback;
         });
     }
 
@@ -265,6 +294,16 @@ class Factory
         $this->preventStrayRequests = $prevent;
 
         return $this;
+    }
+
+    /**
+     * Determine if stray requests are being prevented.
+     *
+     * @return bool
+     */
+    public function preventingStrayRequests()
+    {
+        return $this->preventStrayRequests;
     }
 
     /**
@@ -293,7 +332,7 @@ class Factory
      * Record a request response pair.
      *
      * @param  \Illuminate\Http\Client\Request  $request
-     * @param  \Illuminate\Http\Client\Response  $response
+     * @param  \Illuminate\Http\Client\Response|null  $response
      * @return void
      */
     public function recordRequestResponsePair($request, $response)
@@ -418,9 +457,21 @@ class Factory
      *
      * @return \Illuminate\Http\Client\PendingRequest
      */
+    public function createPendingRequest()
+    {
+        return tap($this->newPendingRequest(), function ($request) {
+            $request->stub($this->stubCallbacks)->preventStrayRequests($this->preventStrayRequests);
+        });
+    }
+
+    /**
+     * Instantiate a new pending request instance for this factory.
+     *
+     * @return \Illuminate\Http\Client\PendingRequest
+     */
     protected function newPendingRequest()
     {
-        return (new PendingRequest($this, $this->globalMiddleware))->withOptions($this->globalOptions);
+        return (new PendingRequest($this, $this->globalMiddleware))->withOptions(value($this->globalOptions));
     }
 
     /**
@@ -456,8 +507,6 @@ class Factory
             return $this->macroCall($method, $parameters);
         }
 
-        return tap($this->newPendingRequest(), function ($request) {
-            $request->stub($this->stubCallbacks)->preventStrayRequests($this->preventStrayRequests);
-        })->{$method}(...$parameters);
+        return $this->createPendingRequest()->{$method}(...$parameters);
     }
 }

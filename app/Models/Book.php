@@ -7,18 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
- 
-    
-   
-        protected $fillable = [
-            'title',
-            'author',
-            'publisher',
-            'edition',
-            'availability_status',
-            'number_of_books',
-        ];
-    
-    
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'author',
+        'category',
+        'availability',
+        'pdf_url',
+        'purchase_price',
+    ];
 }

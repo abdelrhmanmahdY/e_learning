@@ -23,8 +23,6 @@
                         <x-input-label for="email" :value="__('Email')" />
                     </div>
                 </div>
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                <x-auth-session-status class="mb-4" :status="session('status')" />
 
                 <!-- Password Input -->
                 <div class="input-group flex-nowrap w-75 mt-4">
@@ -37,6 +35,9 @@
                     </div>
                 </div>
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
+
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                <x-auth-session-status class="mb-4" :status="session('status')" />
 
                 <!-- Remember Me -->
                 <div class="checkbox mb-3 forgotPass">
