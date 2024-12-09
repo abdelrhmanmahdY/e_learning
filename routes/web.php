@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('user.index');
     Route::get("/books", [BookController::class, 'index'])->name('book.index');
+    Route::post("/books", [BookController::class, 'store'])->name('book.store');
 });
 
 Route::middleware('auth')->group(function () {

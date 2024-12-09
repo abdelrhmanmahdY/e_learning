@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -13,22 +14,32 @@ class BookController extends Controller
         return view('book.index', compact('books'));
     }
 
-    // public function create()
-    // {
-    //     return view('book.create'); // Show form to create a new book
-    // }
 
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'author' => 'required|string|max:255',
-    //         'category' => 'required|string|max:255',
-    //         'availability' => 'required|boolean',
-    //     ]);
 
-    //     Book::create($request->all()); // Create a new book record
+    public function store(Request $request)
+    {
 
-    //     return redirect()->route('book.index'); // Redirect to the book index
-    // }
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'stock' => 'required|integer',
+            'pdf' => 'nullable|file|mimes:pdf|max:2048',
+            'purchase_price' => 'nullable|numeric',
+        ]);
+
+        $pdfPath = ($request->hasFile('pdf')) ? $pdfPath = $request->file('pdf')->store('pdfs', 'public') : $pdfPath = null;
+
+        // Create the book record
+        Book::create([
+            'title' => $request->title,
+            'author' => $request->author,
+            'category' => $request->category,
+            'availability' => $request->stock >= 0,
+            'pdf_url' => $pdfPath,
+            'purchase_price' => $request->purchase_price >= 0,
+        ]);
+
+        return redirect()->route('book.index')->with('success', 'Book created successfully.');
+    }
 }
