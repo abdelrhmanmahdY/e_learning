@@ -47,4 +47,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function roles()
+    {
+  
+            return $this->belongsToMany(Role::class, 'rolegroup', 'user_id', 'role_id');
+      
+    }
+
+    // Helper method to check if user has a certain role
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('role_name', $roleName)->exists();
+    }
 }

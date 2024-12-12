@@ -11,5 +11,7 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+    Route::resource('users', UserController::class);
+
 
 require __DIR__.'/auth.php';

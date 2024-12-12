@@ -28,5 +28,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::resource('users', UserController::class)->middleware('auth');
+Route::middleware(['auth'])->group(function () {
+    Route::resource('user', UserController::class);
+});
+
+Route::middleware('auth')->get('/users', [UserController::class, 'index'])->middleware(['auth', 'user']);
+
+Gate::define('isAdmin', function ($user) {
+    return $user->hasRole('admin');
+});
 
 require __DIR__ . '/auth.php';
