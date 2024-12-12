@@ -30,7 +30,7 @@ class UserController extends Controller
          * Display the user profile.
          */
         public function index(): View
-        {if (Gate::allows('isAdmin')) {
+        {if (!Gate::allows('isAdmin')) {
            abort(403);
         } 
             $users = User::all();
