@@ -9,5 +9,18 @@
     background-color: white;
     height: 100px;
     width: 0px;
-    
+}
+
+.user-name-circle {
+    position: relative;
+}
+.user-name-circle::before {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }

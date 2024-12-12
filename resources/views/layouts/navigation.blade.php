@@ -27,8 +27,12 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <div class=" rounded-circle me-2 overflow-hidden" style="width:50px;height:50px; background-color:#f3f4f6"><img
-                        src="storage/{{ Auth::user()->photo }}" alt=""></div>
+                <div class=" rounded-circle me-2 overflow-hidden"
+                    style="width:50px;height:50px; background-color:#f3f4f6">
+                    @if (Auth::user()->photo)
+                        <img src="storage/{{ Auth::user()->photo }}" alt="">
+                    @endif
+                </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
