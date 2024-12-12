@@ -7,10 +7,17 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+<<<<<<< HEAD
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9"
+=======
+        "laravel/framework": "^11.9",
+        "laravel/tinker": "^2.9",
+        "phpmailer/phpmailer": "^6.9"
+>>>>>>> main
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.14",
         "fakerphp/faker": "^1.23",
         "laravel/breeze": "^2.2",
         "laravel/pail": "^1.1",

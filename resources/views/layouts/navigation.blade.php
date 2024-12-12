@@ -15,11 +15,20 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
+                        {{ __('Users') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('book.index')" :active="request()->routeIs('book.index')">
+                        {{ __('Books') }}
+                    </x-nav-link>
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <div class=" rounded-circle me-2 overflow-hidden" style="width:50px;height:50px; background-color:#f3f4f6"><img
+                        src="storage/{{ Auth::user()->photo }}" alt=""></div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
@@ -69,6 +78,12 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
+                {{ __('Users') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('book.index')" :active="request()->routeIs('book.index')">
+                {{ __('Books') }}
             </x-responsive-nav-link>
         </div>
 

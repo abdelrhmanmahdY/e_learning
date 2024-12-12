@@ -4,9 +4,17 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+
 class AppServiceProvider extends ServiceProvider
 {
-    /**
+
+
+
+    protected $policies = [
+   
+    ];
+
+    /**dsdsd
      * Register any application services.
      */
     public function register(): void
@@ -20,5 +28,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+       
+ 
+
+
+        
     }
 }

@@ -1,0 +1,13 @@
+/* * Book style */
+.book-shape {
+    width: 150px;
+    height: 200px;
+    background-color: white;
+}
+
+.library-shape {
+    background-color: white;
+    height: 100px;
+    width: 0px;
+    
+}
