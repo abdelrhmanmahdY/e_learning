@@ -16,11 +16,18 @@ Route::get('/libraries', function () {
     return view('library.index');
 })->middleware(['auth', 'verified'])->name('library.index');
 
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/users', [UserController::class, 'index'])->name('user.index');
+    Route::post( '/users', [UserController::class, 'index'])->name('user.index');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::post('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
     Route::get("/books", [BookController::class, 'index'])->name('book.index');
     Route::post("/books", [BookController::class, 'store'])->name('book.store');
+});
+Route::middleware('auth')->group(function () {
+    Route::resource('users', UserController::class);
 });
 
 Route::middleware('auth')->group(function () {
@@ -33,7 +40,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
-Route::middleware('auth')->get('/users', [UserController::class, 'index'])->middleware(['auth', 'user']);
+
+
+
 
 Gate::define('isAdmin', function ($user) {
     return $user->hasRole('admin');
