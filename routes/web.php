@@ -28,7 +28,7 @@ Route::get('/pdf', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::post( '/users', [UserController::class, 'index'])->name('user.index');
+    Route::post('/users', [UserController::class, 'index'])->name('user.index');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::post('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');

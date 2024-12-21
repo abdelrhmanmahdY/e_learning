@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,23 +28,24 @@ class UserController extends Controller
 
 
     public function index(Request $request)
-    {if (!Gate::allows('isAdmin')) {
-        abort(403);
-    }
-
-    $users = User::with('roles')->get(); 
-    $roles = Role::all(); 
-
-    foreach ($users as $user) {
-        if ($user->photo) {
-            $user->photo = base64_encode($user->photo);  
+    {
+        if (!Gate::allows('isAdmin')) {
+            abort(403);
         }
+
+        $users = User::with('roles')->get();
+        $roles = Role::all();
+
+        foreach ($users as $user) {
+            if ($user->photo) {
+                $user->photo = base64_encode($user->photo);
+            }
+        }
+
+        return view('user.index', compact('users', 'roles'));
     }
 
-    return view('user.index', compact('users', 'roles'));
-    }
 
-   
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
@@ -52,7 +54,7 @@ class UserController extends Controller
             'password' => 'nullable|min:8',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'role' => 'required|array',
-            'role.*' => 'exists:role,id', 
+            'role.*' => 'exists:role,id',
         ]);
 
         $user = User::findOrFail($id);
@@ -63,10 +65,10 @@ class UserController extends Controller
             $user->password = Hash::make($validatedData['password']);
         }
 
-    if ($request->hasFile('photo')) {
+        if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $imageData = file_get_contents($file); 
-            $user->photo = $imageData; 
+            $imageData = file_get_contents($file);
+            $user->photo = $imageData;
         }
 
         $user->roles()->sync($validatedData['role']);
@@ -79,11 +81,6 @@ class UserController extends Controller
         if (!Gate::allows('isAdmin')) {
             abort(403);
         }
-<<<<<<< HEAD
-        $users = User::with('penalties', 'roles')->get();
-
-        return view('user.index', compact('users'));
-=======
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -91,7 +88,7 @@ class UserController extends Controller
             'password' => 'required|min:8',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'role' => 'required|array',
-            'role.*' => 'exists:role,id', 
+            'role.*' => 'exists:role,id',
         ]);
 
         $user = new User();
@@ -99,16 +96,15 @@ class UserController extends Controller
         $user->email = $validatedData['email'];
         $user->password = Hash::make($validatedData['password']);
 
-     if ($request->hasFile('photo')) {
+        if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $imageData = file_get_contents($file); 
-            $user->photo = $imageData; 
+            $imageData = file_get_contents($file);
+            $user->photo = $imageData;
         }
         $user->save();
         $user->roles()->attach($validatedData['role']);
 
         return redirect()->route('user.index')->with('success', 'User created successfully!');
->>>>>>> 536d04a30092d90d593904e2641316b8e1ea70d9
     }
 
 
@@ -121,7 +117,7 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-       
+
         $user->roles()->detach();
 
         $user->delete();
@@ -129,40 +125,40 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'User deleted successfully!');
     }
 
-// public function update(Request $request, $id)
-//     {
-//         if (!Gate::allows('isAdmin')) {
-//             abort(403);
-//         }
-//         $validatedData = $request->validate([
-//             'name' => 'required|string|max:255',
-//             'email' => 'required|email|unique:users,email,' . $id,
-//             'password' => 'nullable|min:8',
-//             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//             'role' => 'required|in:admin,editor,user',
-//         ]);
- 
-//         $user = User::findOrFail($id);
-//         $user->name = $validatedData['name'];
-//         $user->email = $validatedData['email'];
-    
-//         if (!empty($validatedData['password'])) {
-//             $user->password = Hash::make($validatedData['password']);
-//         }
-//         $user->role = $validatedData['role'];
-//         if ($request->hasFile('photo')) {
-//             $file = $request->file('photo');
-//             $imageData = file_get_contents($file); 
-//             $user->photo = $imageData; 
-//         }
-    
-        
-//         $user->save();
+    // public function update(Request $request, $id)
+    //     {
+    //         if (!Gate::allows('isAdmin')) {
+    //             abort(403);
+    //         }
+    //         $validatedData = $request->validate([
+    //             'name' => 'required|string|max:255',
+    //             'email' => 'required|email|unique:users,email,' . $id,
+    //             'password' => 'nullable|min:8',
+    //             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //             'role' => 'required|in:admin,editor,user',
+    //         ]);
 
-//         return redirect()->route('user.index')->with('success', 'User updated successfully!');
-//     }
-    
-    
+    //         $user = User::findOrFail($id);
+    //         $user->name = $validatedData['name'];
+    //         $user->email = $validatedData['email'];
+
+    //         if (!empty($validatedData['password'])) {
+    //             $user->password = Hash::make($validatedData['password']);
+    //         }
+    //         $user->role = $validatedData['role'];
+    //         if ($request->hasFile('photo')) {
+    //             $file = $request->file('photo');
+    //             $imageData = file_get_contents($file); 
+    //             $user->photo = $imageData; 
+    //         }
+
+
+    //         $user->save();
+
+    //         return redirect()->route('user.index')->with('success', 'User updated successfully!');
+    //     }
+
+
     // public function store(Request $request)
     // {
     //     // Validate the input
@@ -197,5 +193,5 @@ class UserController extends Controller
     //     // Redirect back with a success message
     //     return redirect()->redirect()->route('user.store')->back()->with('success', 'User created successfully!');
     // }
-  
+
 }
