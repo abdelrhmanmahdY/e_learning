@@ -1,6 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between ">
+    @if(session('success'))
+        <div class="alert alert-success"> success</div>
+    @endif
+
+        <div class="d-flex justify-content-between " >
             <h2
                 class="mb-0 d-flex justify-content-center align-items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Users') }}
@@ -11,8 +15,9 @@
                 btn-primary">Create</button>
         </div>
         <x-modal name="user-create">
-            <form action="" method="post" enctype="multipart/form-data">
-                <x-table>
+            <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+            @csrf   
+            <x-table>
                     <x-slot name="tableHead">
                         <th>Name</th>
                         <th>Email</th>
@@ -23,17 +28,18 @@
                     </x-slot>
                     <x-slot name="tableBody">
                         <td> <x-text-input type="text" maxlength="12" autocomplete="name" name="name"
-                                class="form-control name" placeholder="UserName" id="name" autofocus required />
+                                class="form-control name" placeholder="UserName" id="name"   autofocus required />
                         </td>
-                        <td> <x-text-input id="email" class="form-control email" type="email" name="email"
+                        <td> <x-text-input id="email" class="form-control email" type="email" name="email" 
                                 required autocomplete="username" />
                         </td>
                         <td> <x-text-input id="password" class="form-control password" type="password" name="password"
                                 required autocomplete="new-password" />
                         </td>
-                        <td><select name="role" class="form-select" style="width:110px">
-                                <option selected value="student">Student</option>
-                                <option value="admin">Admin</option>
+                        <td><select id="role" name="role[]" class="form-select" style="width:110px">
+                        @foreach($roles as $role)
+                <option value="{{ $role->id }}">{{ $role->role_name }}</option>
+            @endforeach
                             </select>
                         </td>
                         <td>
@@ -52,7 +58,7 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 <x-input-error :messages="$errors->get('role')" class="mt-2" />
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-primary mb-3">Create</button>
+                    <button class="btn btn-primary mb-3" type="sumbit">Create</button>
                 </div>
             </form>
 
@@ -66,13 +72,14 @@
                         <button x-data=''
                             x-on:click.prevent="$dispatch('open-modal',
         '{{ $user->name }}-info')">
-                            @if ($user->photo)
-                                <img src="storage/{{ $user->photo }}" style="width:150px"
-                                    class="card-img-top rounded-circle" alt="...">
-                            @else
-                                <div style="width:150px; height:150px" class="card-img-top rounded-circle"
-                                    alt="..."></div>
-                            @endif
+               
+        @if ($user->photo)
+                <img src="data:image/jpeg;base64,{{ $user->photo }}" alt="{{ $user->name }}'s Photo" style="width:150px;height:150px"
+                                    class="card-img-top rounded-circle" >
+            @else
+            <img src="{{ asset('resources/img/download.jpg') }}" style="width:150px;height:150px" class="card-img-top rounded-circle" />
+
+            @endif
 
 
                         </button>
@@ -95,7 +102,7 @@
                         @endif
                     @endforeach
                     <b class="user-name-circle">{{ $user->name }}</b>
-                    <x-modal name="{{ $user->name }}-info">
+                    <x-modal name="{{ $user->name }}-info" >
                         <x-table>
                             <x-slot name="tableHead">
                                 <th>Name</th>
@@ -107,12 +114,17 @@
                             <x-slot name="tableBody">
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
+<<<<<<< HEAD
                                 <td>{{ $user->roles[0]->role_name }}</td>
+=======
+                                <td>{{ $user->role }}</td>
+                              
+>>>>>>> 536d04a30092d90d593904e2641316b8e1ea70d9
 
 
                             </x-slot></x-table>
 
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center" >
                             <button class="btn btn-danger mb-4" x-data=''
                                 x-on:click.prevent="() => { $dispatch('close'); $dispatch('open-modal', '{{ $user->name }}-deletion'); }">Delete</button>
                             <button class="btn btn-warning ms-3 mb-4"
@@ -124,9 +136,9 @@
                     </x-modal>
 
                     <x-modal name="{{ $user->name }}-deletion">
-                        <form method="post" class="p-6">
-                            @csrf
-                            @method('DELETE')
+                    <form action="{{ route('user.destroy',  ['user' => $user->id]) }}" method="POST" style="display:inline;">
+                    @csrf
+                           
 
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                                 {{ __('Are you sure you want to delete This User?') }}
@@ -150,39 +162,45 @@
                             </div>
                         </form>
                     </x-modal>
-                    <x-modal name="{{ $user->name }}-edit">
-                        <form action="" method="post" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <x-table>
-                                <x-slot name="tableHead">
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-
-                                </x-slot>
-                                <x-slot name="tableBody">
-                                    <td><x-text-input class="form-control" id="name" name="name"
-                                            value="{{ $user->name }}" style="border: none" required /></td>
+                    <x-modal name="{{ $user->name }}-edit"  action="/users/{{ $user->id }}" >
+                    <form action="{{ route('user.update', ['user' => $user->id]) }}" method="POST" enctype="multipart/form-data" >
+    @csrf
+    @method('PUT')
+        <x-table>
+            <x-slot name="tableHead">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+             
+                <th>image</th>
+            </x-slot>
+            <x-slot name="tableBody">
+                                    <td><x-text-input class="form-control" id="name" name="name" value="{{ $user->name }}"  class="form-control" required /></td>
                                     <td><x-text-input class="form-control" id="email" name="email"
-                                            value="{{ $user->email }}" style="border: none" required /></td>
-                                    <td><select name="role" class="form-select"
-                                            style="width:196px; height:40px">
-                                            <option selected value="student">Student</option>
-                                            <option value="admin">Admin</option>
-                                        </select>
+                                            value="{{ $user->email }}"  class="form-control" required /></td>
+                                     
+                                    <td><select  class="form-control" id="roles" name="role[]" style="width:120px; height:40px">
+                @foreach ($roles as $role)
+                    <option value="{{ $role->id }}" {{ in_array($role->id, $user->roles->pluck('id')->toArray()) ? 'selected' : '' }}>
+                        {{ $role->role_name }}
+                    </option>
+                @endforeach
+            </select>
+                                    </td>     
+                                    <td>
+                                    <input type="file" id="photo" name="photo"  class="form-control"  accept="image/*"
+                                    >
                                     </td>
-                                </x-slot></x-table>
+                                </x-slot>
+        </x-table>
+                                <div class="d-flex justify-content-center">
+                                <button class="btn btn-warning mb-3">Confirm</button>      </div>
+</form>
 
-                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                            <div class="d-flex justify-content-center">
-                                <button class="btn btn-warning mb-3">Confirm</button>
-                            </div>
-                        </form>
+
                     </x-modal>
-                    <x-modal name="{{ $user->name }}-penalties">
-                        <form action="" method="post" id="penaltyDeleteForm">
+                    <x-modal name="{{ $user->name }}-penalties" class="w-full max-w-2xl mx-auto">
+                        <form action="" method="post" id="penaltyDeleteForm" class="p-10">
                             @csrf
                             @method('DELETE')
                             <x-table>

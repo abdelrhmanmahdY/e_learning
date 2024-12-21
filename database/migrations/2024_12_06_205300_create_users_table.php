@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 
 class CreateUsersTable extends Migration
 {
@@ -13,7 +14,7 @@ class CreateUsersTable extends Migration
             $table->string('name')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('photo')->nullable();
+            $table->longblob('photo');
             $table->rememberToken();
             $table->timestamps();
         });
