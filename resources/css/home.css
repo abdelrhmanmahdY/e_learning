@@ -1,0 +1,64 @@
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+main {
+    height: calc(100vh - 56px);
+}
+
+section {
+    padding-block: 50px;
+}
+
+.background {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(360deg,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(139, 200, 229, 1) 100%);
+}
+
+.rbackground {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(139, 200, 229, 1) 100%);
+}
+
+h1 {
+    font-family: "Fira Sans", serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
+h2 {
+    font-family: "Fira Sans", serif;
+    font-weight: 500;
+    font-style: italic;
+}
+
+h3 {
+    font-family: "Fira Sans", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.time{
+font-family: "Fira Sans", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.most {
+    backdrop-filter: sepia(70%);
+    padding-block-end: 15px;
+}
+
+.bookshape {
+    width: 400px;
+    height: 500px;
+    background-color: black;
+}

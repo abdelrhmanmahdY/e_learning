@@ -17,9 +17,9 @@
                         <th>Title</th>
                         <th>Author</th>
                         <th>Category</th>
-                        <th>Stock</th>
                         <th>Pdf</th>
                         <th>Price</th>
+                        <th>Availability</th>
 
                     </x-slot>
                     <x-slot name="tableBody">
@@ -32,17 +32,18 @@
                         <td> <x-text-input id="category" class="form-control " type="text" name="category" required
                                 autocomplete="category" />
                         </td>
-                        <td><x-text-input type="number" name="stock" id="stock" class="form-control"
-                                autocomplete="stock" required />
-                        </td>
                         <td>
                             <x-text-input style="width:110px" id="pdf" name="pdf" type="file"
                                 class="form-control" accept=".pdf" />
-
                         </td>
                         <td>
                             <x-text-input type="number" name="purchase_price" id="purchase_price"
                                 class="form-control" />
+                        </td>
+                        <td>
+                            <x-text-input type="checkbox" value="1" checked name="availability" id="available"
+                                class="form-check-input available-check" autocomplete="available" />
+
 
                         </td>
 
@@ -54,7 +55,7 @@
                 <x-input-error :messages="$errors->get('title')" class="mt-2" />
                 <x-input-error :messages="$errors->get('author')" class="mt-2" />
                 <x-input-error :messages="$errors->get('category')" class="mt-2" />
-                <x-input-error :messages="$errors->get('stock')" class="mt-2" />
+                <x-input-error :messages="$errors->get('availability')" class="mt-2" />
                 <x-input-error :messages="$errors->get('purchase_price')" class="mt-2" />
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary mb-3">Create</button>
@@ -80,18 +81,30 @@
                                 <th>Title</th>
                                 <th>Author</th>
                                 <th>Category</th>
-                                <th>Stock</th>
                                 <th>Pdf</th>
                                 <th>Price</th>
+                                <th>Availability</th>
 
                             </x-slot>
                             <x-slot name="tableBody">
                                 <td>{{ $book->title }}</td>
                                 <td>{{ $book->author }}</td>
                                 <td>{{ $book->category }}</td>
-                                <td>{{ $book->stock }}</td>
-                                <td>{{ $book->pdf_url ? 'Yes' : 'No' }}</td>
-                                <td>{{ $book->Price }}</td>
+                                @if ($book->pdf_url)
+                                    <td> <button type="button" class="btn btn-link">Pdf</button></td>
+                                @else
+                                    <td>No</td>
+                                @endif
+                                <td>{{ $book->purchase_price }}</td>
+                                <td>
+                                    @if ($book->availability)
+                                        <x-text-input type="checkbox" checked disabled style="margin-top: 0"
+                                            class="form-check-input available-check" autocomplete="available" />
+                                    @else
+                                        <x-text-input type="checkbox" disabled class="form-check-input available-check"
+                                            autocomplete="available" style="margin-top: 0" />
+                                    @endif
+                                </td>
                             </x-slot>
                         </x-table>
 
@@ -140,22 +153,32 @@
                                     <th>Title</th>
                                     <th>Author</th>
                                     <th>Category</th>
-                                    <th>Stock</th>
                                     <th>Pdf</th>
                                     <th>Price</th>
+                                    <th>Availability</th>
 
                                 </x-slot>
                                 <x-slot name="tableBody">
                                     <td><x-text-input style="border: none" class="form-control" name="title"
-                                            maxlength="20" /></td>
-                                    <td><x-text-input style="border: none" class="form-control" name="author" /></td>
-                                    <td><x-text-input style="border: none" class="form-control" name="category" /></td>
-                                    <td><x-text-input type="number" class="form-control" style="border: none"
-                                            name="stock" /></td>
+                                            maxlength="20" value="{{ $book->title }}" /></td>
+                                    <td><x-text-input style="border: none" class="form-control" name="author"
+                                            value="{{ $book->author }}" /></td>
+                                    <td><x-text-input style="border: none" class="form-control" name="category"
+                                            value="{{ $book->category }}" /></td>
                                     <td><x-text-input type='file' class="form-control" accept=".pdf"
                                             style="border: none ;width:108px" name="pdf" /></td>
                                     <td><x-text-input type="number" class="form-control" style="border: none"
-                                            name="purchase_price" /></td>
+                                            name="purchase_price" value="{{ $book->purchase_price }}" /></td>
+                                    <td>
+                                        @if ($book->availability)
+                                            <x-text-input type="checkbox" checked
+                                                class="form-check-input available-check" autocomplete="available"
+                                                name="availability" />
+                                        @else
+                                            <x-text-input type="checkbox" class="form-check-input available-check"
+                                                autocomplete="available" name="availability" />
+                                        @endif
+                                    </td>
                                 </x-slot></x-table>
                             <x-input-error :messages="$errors->get('title')" class="mt-2" />
                             <x-input-error :messages="$errors->get('author')" class="mt-2" />

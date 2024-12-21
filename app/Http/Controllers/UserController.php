@@ -34,7 +34,8 @@ class UserController extends Controller
         if (!Gate::allows('isAdmin')) {
             abort(403);
         }
-        $users = User::with('penalties')->get();
+        $users = User::with('penalties', 'roles')->get();
+
         return view('user.index', compact('users'));
     }
 

@@ -23,10 +23,13 @@ class BookController extends Controller
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
             'category' => 'required|string|max:255',
-            'stock' => 'required|integer',
+            'availability' => 'boolean',
             'pdf' => 'nullable|file|mimes:pdf|max:2048',
             'purchase_price' => 'nullable|numeric',
         ]);
+        if (!$request->has('availability')) {
+            $request->merge(['availability' => false]);
+        }
 
         $pdfPath = ($request->hasFile('pdf')) ? $pdfPath = $request->file('pdf')->store('pdfs', 'public') : $pdfPath = null;
 
@@ -35,7 +38,7 @@ class BookController extends Controller
             'title' => $request->title,
             'author' => $request->author,
             'category' => $request->category,
-            'availability' => $request->stock >= 0,
+            'availability' => $request->availability,
             'pdf_url' => $pdfPath,
             'purchase_price' => $request->purchase_price >= 0,
         ]);

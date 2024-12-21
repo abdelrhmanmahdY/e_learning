@@ -13,7 +13,7 @@ class CreateBooksTable extends Migration
             $table->string('title');
             $table->string('author');
             $table->string('category');
-            $table->integer('availability');
+            $table->boolean('availability');
             $table->string('pdf_url')->nullable();
             $table->decimal('purchase_price', 10, 2)->nullable();
             $table->timestamps();

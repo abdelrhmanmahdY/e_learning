@@ -1,20 +1,29 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BrowseController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Gate;
+
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get(
+    '/',
+    [HomeController::class, 'index']
+)->name('home');
+
+Route::get('/browse', [BrowseController::class, 'index'])->name('browse.index');
+Route::get('/browse/{id}', [BrowseController::class, 'show'])->name('browse.show');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/libraries', function () {
-    return view('library.index');
-})->middleware(['auth', 'verified'])->name('library.index');
+Route::get('/pdf', function () {
+    return view('book.pdf');
+})->middleware(['auth', 'verified'])->name('pdf.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 

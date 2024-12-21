@@ -59,7 +59,7 @@
         </x-modal>
     </x-slot>
     <x-slot name="slot">
-        <div class="container text-center mt-3">
+        <div class="container text-center mt-3" style="padding-block-end: 50px">
             <div class="row row-cols-4 ms-1 gap-5">
                 @foreach ($users as $user)
                     <div class="card col rounded-circle p-0" style="width:150px ;height:150px;">
@@ -107,7 +107,7 @@
                             <x-slot name="tableBody">
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->role }}</td>
+                                <td>{{ $user->roles[0]->role_name }}</td>
 
 
                             </x-slot></x-table>
