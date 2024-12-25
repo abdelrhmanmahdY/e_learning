@@ -224,7 +224,30 @@
 
                         </form>
                         <div class="mt-4">
-                            <form action="" method="post" id="penaltyAddForm">
+                       
+                            <form action=" {{ route('user.addPenalty', ['user' => $user->id]) }}" method="post" id="penaltyAddForm">
+                                @csrf
+                                <select name="penalty_id" class="form-select" required>
+                                    <option value="">Select Penalty</option>
+                                    @foreach ($penalties as $penalty)
+                                        <option value="{{ $penalty->id }}">{{ $penalty->severity_level }} </option>
+                                    @endforeach
+                                </select>
+
+
+                           
+
+                        </div>
+                        <div class="d-flex justify-content-center mt-4">
+                      
+                           
+
+                        </div>
+
+                        </form>
+                        <button     form="penaltyAddForm" class="btn btn-primary   mb-4">Add</button>
+                            
+                        <!-- <form action="" method="post" id="penaltyAddForm">
                                 @csrf
                                 <select id="penalty-dropdown"
                                     class=" form-select mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
@@ -245,11 +268,10 @@
                         </div>
                         <div class="d-flex justify-content-center mt-4">
                             <button form="penaltyAddForm" class="btn btn-primary   mb-4">Add</button>
+                            
                             <button form="penaltyDeleteForm" class="btn btn-danger ms-3 mb-4 ">Delete</button>
 
-                        </div>
-
-
+                        </div> -->
 
                     </x-modal>
                 </div>

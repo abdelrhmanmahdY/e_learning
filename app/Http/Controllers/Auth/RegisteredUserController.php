@@ -41,15 +41,27 @@ class RegisteredUserController extends Controller
 
 
 
-        $photoPath = $request->file('photo') ? $request->file('photo')->store('photos', 'public') : null;
-
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $imageData = file_get_contents($file);
+            $user->photo = $imageData;
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'photo' => $photoPath,
+    
+            ]);
+        }
+       
+else{
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'photo' => $photoPath,
+        
 
-        ]);
+        ]);}
 
         event(new Registered($user));
 

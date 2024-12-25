@@ -11,8 +11,8 @@
         </div>
         <x-modal name="book-create">
             <form action="{{ route('book.store') }}" method="post" enctype="multipart/form-data">
-                @csrf
-                <x-table>
+            @csrf  
+            <x-table>
                     <x-slot name="tableHead">
                         <th>Title</th>
                         <th>Author</th>
@@ -33,16 +33,18 @@
                                 autocomplete="category" />
                         </td>
                         <td>
-                            <x-text-input style="width:110px" id="pdf" name="pdf" type="file"
-                                class="form-control" accept=".pdf" />
+                            <x-text-input style="width:110px" id="pdf_url"  type="file"
+                                class="form-control" accept=".pdf"   name="pdf_url" accept="application/pdf"/>
                         </td>
                         <td>
                             <x-text-input type="number" name="purchase_price" id="purchase_price"
                                 class="form-control" />
                         </td>
                         <td>
-                            <x-text-input type="checkbox" value="1" checked name="availability" id="available"
-                                class="form-check-input available-check" autocomplete="available" />
+                        <select class="form-select" id="availability" name="availability" required>
+                <option value="1" >Available</option>
+                <option value="0" >Not Available</option>
+                </select>
 
 
                         </td>
@@ -60,6 +62,8 @@
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary mb-3">Create</button>
                 </div>
+
+
             </form>
 
         </x-modal>
@@ -81,30 +85,22 @@
                                 <th>Title</th>
                                 <th>Author</th>
                                 <th>Category</th>
+                                <th>availability</th>
                                 <th>Pdf</th>
                                 <th>Price</th>
-                                <th>Availability</th>
 
                             </x-slot>
                             <x-slot name="tableBody">
                                 <td>{{ $book->title }}</td>
                                 <td>{{ $book->author }}</td>
                                 <td>{{ $book->category }}</td>
-                                @if ($book->pdf_url)
-                                    <td> <button type="button" class="btn btn-link">Pdf</button></td>
+                            @if ($book->availability==1)
+                                <td>true</td>
                                 @else
-                                    <td>No</td>
+                                <td>false</td>
                                 @endif
+                                <td>{{ $book->pdf_url ? 'Yes' : 'No' }}</td>
                                 <td>{{ $book->purchase_price }}</td>
-                                <td>
-                                    @if ($book->availability)
-                                        <x-text-input type="checkbox" checked disabled style="margin-top: 0"
-                                            class="form-check-input available-check" autocomplete="available" />
-                                    @else
-                                        <x-text-input type="checkbox" disabled class="form-check-input available-check"
-                                            autocomplete="available" style="margin-top: 0" />
-                                    @endif
-                                </td>
                             </x-slot>
                         </x-table>
 
@@ -118,12 +114,12 @@
                     </x-modal>
 
                     <x-modal name="{{ $book->title }}-deletion">
-                        <form method="post" class="p-6">
+                              <form action="{{ route('book.destroy',  ['book' => $book->id]) }}" method="POST" class="p-6">
                             @csrf
-                            @method('DELETE')
-
+                        
+                    
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                {{ __('Are you sure you want to delete This User?') }}
+                                {{ __('Are you sure you want to delete This book?') }}
                             </h2>
 
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -139,13 +135,13 @@
                                 </x-secondary-button>
 
                                 <x-danger-button class="ms-3">
-                                    {{ __('Delete User') }}
+                                    {{ __('Delete book') }}
                                 </x-danger-button>
                             </div>
                         </form>
                     </x-modal>
-                    <x-modal name="{{ $book->title }}-edit">
-                        <form action="" method="post" enctype="multipart/form-data">
+                    <x-modal name="{{ $book->title }}-edit" action="/books/{{ $book->id }}">
+                    <form action="{{ route('book.update', ['book' => $book->id]) }}"method="POST"  enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <x-table>
@@ -153,39 +149,31 @@
                                     <th>Title</th>
                                     <th>Author</th>
                                     <th>Category</th>
+                                    <th>availability</th>
                                     <th>Pdf</th>
-                                    <th>Price</th>
-                                    <th>Availability</th>
+                                    <th>purchase_price</th>
 
                                 </x-slot>
                                 <x-slot name="tableBody">
                                     <td><x-text-input style="border: none" class="form-control" name="title"
                                             maxlength="20" value="{{ $book->title }}" /></td>
-                                    <td><x-text-input style="border: none" class="form-control" name="author"
-                                            value="{{ $book->author }}" /></td>
-                                    <td><x-text-input style="border: none" class="form-control" name="category"
-                                            value="{{ $book->category }}" /></td>
+                                    <td><x-text-input style="border: none" class="form-control" name="author" value="{{ $book->author }}" /></td>
+                                    <td><x-text-input style="border: none" class="form-control" name="category" value="{{ $book->category }}" /></td>
+                                    <td><select class="form-select" id="availability" name="availability" required>
+                <option value="1" >Available</option>
+                <option value="0" >Not Available</option>
+                </select></td>
                                     <td><x-text-input type='file' class="form-control" accept=".pdf"
-                                            style="border: none ;width:108px" name="pdf" /></td>
+                                            style="border: none ;width:108px" name="pdf_url" value="{{ $book->pdf_url }}"/></td>
                                     <td><x-text-input type="number" class="form-control" style="border: none"
-                                            name="purchase_price" value="{{ $book->purchase_price }}" /></td>
-                                    <td>
-                                        @if ($book->availability)
-                                            <x-text-input type="checkbox" checked
-                                                class="form-check-input available-check" autocomplete="available"
-                                                name="availability" />
-                                        @else
-                                            <x-text-input type="checkbox" class="form-check-input available-check"
-                                                autocomplete="available" name="availability" />
-                                        @endif
-                                    </td>
+                                            name="purchase_price" value="{{ $book->purchase_price }}"/></td>
                                 </x-slot></x-table>
                             <x-input-error :messages="$errors->get('title')" class="mt-2" />
                             <x-input-error :messages="$errors->get('author')" class="mt-2" />
-                            <x-input-error :messages="$errors->get('categoryi')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('category')" class="mt-2" />
 
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-warning mb-3">Confirm</button>
+                                <button class="btn btn-warning mb-3" type="sumbit">Confirm</button>
                             </div>
                         </form>
                     </x-modal>

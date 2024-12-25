@@ -17,6 +17,7 @@ Route::get(
 Route::get('/browse', [BrowseController::class, 'index'])->name('browse.index');
 Route::get('/browse/{id}', [BrowseController::class, 'show'])->name('browse.show');
 
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -32,8 +33,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::post('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::post('/user/{user}', [UserController::class, 'addPenalty'])->name('user.addPenalty');
     Route::get("/books", [BookController::class, 'index'])->name('book.index');
     Route::post("/books", [BookController::class, 'store'])->name('book.store');
+    Route::put('/books/{book}', [BookController::class, 'update'])->name('book.update');
+    Route::post('/books/{book}', [BookController::class, 'destroy'])->name('book.destroy');
 });
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);

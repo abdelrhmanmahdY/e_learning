@@ -16,5 +16,6 @@ class Book extends Model
         'availability',
         'pdf_url',
         'purchase_price',
+        'photo',
     ];
 }

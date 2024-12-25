@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Penalty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,6 +28,7 @@ class UserController extends Controller
 
 
 
+
     public function index(Request $request)
     {
         if (!Gate::allows('isAdmin')) {
@@ -34,6 +36,7 @@ class UserController extends Controller
         }
 
         $users = User::with('roles')->get();
+        $penalties  = Penalty::all();
         $roles = Role::all();
 
         foreach ($users as $user) {
@@ -42,7 +45,7 @@ class UserController extends Controller
             }
         }
 
-        return view('user.index', compact('users', 'roles'));
+        return view('user.index', compact('users', 'roles','penalties'));
     }
 
 
@@ -125,73 +128,30 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'User deleted successfully!');
     }
 
-    // public function update(Request $request, $id)
-    //     {
-    //         if (!Gate::allows('isAdmin')) {
-    //             abort(403);
-    //         }
-    //         $validatedData = $request->validate([
-    //             'name' => 'required|string|max:255',
-    //             'email' => 'required|email|unique:users,email,' . $id,
-    //             'password' => 'nullable|min:8',
-    //             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //             'role' => 'required|in:admin,editor,user',
-    //         ]);
 
-    //         $user = User::findOrFail($id);
-    //         $user->name = $validatedData['name'];
-    //         $user->email = $validatedData['email'];
+    public function addPenalty(Request $request, $id)
+    {
+        if (!Gate::allows('isAdmin')) {
+            abort(403);
+        }
 
-    //         if (!empty($validatedData['password'])) {
-    //             $user->password = Hash::make($validatedData['password']);
-    //         }
-    //         $user->role = $validatedData['role'];
-    //         if ($request->hasFile('photo')) {
-    //             $file = $request->file('photo');
-    //             $imageData = file_get_contents($file); 
-    //             $user->photo = $imageData; 
-    //         }
+        $validatedData = $request->validate([
+            'penalty_id' => 'required|exists:penalties,id',
+        ]);
 
+        $user = User::findOrFail($id);
 
-    //         $user->save();
+        // Check if the user has the "student" role
+        if (!$user->roles->contains('role_name', 'student')) {
+            return redirect()->back()->with('error', 'Only students can be assigned penalties.');
+        }
 
-    //         return redirect()->route('user.index')->with('success', 'User updated successfully!');
-    //     }
+        // Assign penalty
+        $user->save();
+        $user->penalties()->attach($validatedData['penalty_id']);
 
+        return redirect()->back()->with('success', 'Penalty added to the student successfully!');
+    }
 
-    // public function store(Request $request)
-    // {
-    //     // Validate the input
-    //     if (!Gate::allows('isAdmin')) {
-    //         abort(403);
-    //     }
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|unique:users,email,' . $id,
-    //         'password' => 'nullable|min:8',
-    //         'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //   'role' => 'nullable|array',
-    //     ]);
-    //     // Handle the file upload (if photo exists)
-    //     if ($request->hasFile('photo')) {
-    //         $filePath = $request->file('photo')->store('photos', 'public');
-    //         $validated['photo'] = $filePath;
-    //     }
-    //     $user = User::create([
-    //         'name' => $validated['name'],
-    //         'email' => $validated['email'],
-    //         'password' => Hash::make($validated['password']),
-    //         'photo' => $photoPath,
-    //     ]);
-    //     // Hash the password
-    //     $validated['password'] = Hash::make($validated['password']);
-
-    //     // Create the user
-    //     $user->role()->attach($validated['role']);
-    //     $user->save();
-
-    //     // Redirect back with a success message
-    //     return redirect()->redirect()->route('user.store')->back()->with('success', 'User created successfully!');
-    // }
 
 }
