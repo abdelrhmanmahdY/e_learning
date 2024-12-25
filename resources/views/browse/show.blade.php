@@ -1,17 +1,17 @@
 <x-student-layout>
     <x-slot name="slot">
-        <main
-            style=" background: rgb(255, 255, 255);
-    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 57%, rgba(139, 200, 229, 1) 100%);
+        <main class="show"
+            style=" 
+    background: rgb(255, 255, 255);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 40%, rgb(236 110 88) 100%);
 ">
             <section class="d-flex justify-content-around
-         align-items-center container">
+         align-items-center container show">
 
-                <div class="info   text-center" style="width:800px">
+                <div class="info   text-center">
                     <div class="aboutbook">
-                        <h1><q>{{ $book->title }}</q></h1>
+                        <h1 class="q"><q>{{ $book->title }}</q></h1>
                         <h2 class="mt-2">Author : {{ $book->author }}</h2>
-                        <h3 class="mt-2">Price : {{ $book->purchase_price }}$</h3>
                     </div>
 
                     <div class="buttons
@@ -19,25 +19,32 @@
                         @if ($book->availability)
                             <form action="" method="post">
                                 @csrf
-                                <x-input-label class='time' for="date">TimeLine : </x-input-label><br>
-                                <x-text-input type="date" class="mb-3" id="date" name="date" />
+                                <input type="hidden" name="user_id" value="{{ encrypt(Auth::user()->id) }}">
+                                <input type="hidden" name="book_id" value="{{ encrypt($book->id) }}">
+
+                                <x-text-input type="date" id="date" name="date" />
+
+
+                                <button class="borrow btn " onclick="return validateDate()" value="borrow"
+                                    style="background-color: #1a99aa;color:white">Borrow</button>
                                 <br>
                                 <output class="mb-1" name="price" for="date"></output>
                                 <br>
-
-                                <button class="borrow btn btn-primary " onclick="return validateDate()"
-                                    value="borrow">Borrow</button>
                                 @if ($book->purchase_price > 1)
-                                    <button class="purchies btn  btn-primary" value="purchies">Purchies</button>
+                                    <button class="purchies btn" value="purchies"
+                                        style="background-color: #1a99aa;color:white">Purchies</button>
                                 @endif
                             @else
-                                <button class="reserve btn  btn-primary" value="reserve">Reserve</button>
+                                <button class="reserve btn" value="reserve"
+                                    style="background-color: #1a99aa;color:white">Reserve</button>
                         @endif
                         </form>
                     </div>
                 </div>
                 <div>
-                    <div class="bookshape" style="background-image: {{}}"></div>
+                    <div class="bookshape" style="background-image: "></div>
+                    <h3 class="mt-2 text-center">Price : {{ $book->purchase_price }}$</h3>
+
                 </div>
             </section>
         </main>

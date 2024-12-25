@@ -83,8 +83,8 @@ body {
 }
 
 .signUp:hover {
-    border-bottom: 2px #0dcaf0 solid;
-    color: #0dcaf0 !important;
+    border-bottom: 2px #573b85 solid;
+    color: #573b85 !important;
     padding-bottom: 4px;
 }
 
@@ -110,9 +110,9 @@ body {
 }
 
 .login:hover {
-    color: #0dcaf0 !important ;
+    color: #573b85 !important;
     cursor: pointer;
-    border-bottom: 2px #0dcaf0 solid;
+    border-bottom: 2px #573b85 solid;
     padding-bottom: 10px;
 }
 

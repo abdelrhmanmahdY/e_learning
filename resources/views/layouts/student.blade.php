@@ -61,6 +61,8 @@
                                 style="width:50px;height:50px; background-color:#f3f4f6">
                                 @if (Auth::user()->photo)
                                     <img src="storage/{{ Auth::user()->photo }}" alt="">
+                                @else
+                                    <img src="/e_learning/resources/img/download.jpg">
                                 @endif
                             </div>
                             <x-dropdown align="right" width="48">
