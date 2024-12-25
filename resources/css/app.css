@@ -2242,7 +2242,7 @@ select {
 
 .focus\:border-indigo-700:focus {
     --tw-border-opacity: 1;
-    border-color: rgb(67 56 202 / var(--tw-border-opacity, 1));
+    border-color: #573b85;
 }
 
 .focus\:bg-gray-100:focus {

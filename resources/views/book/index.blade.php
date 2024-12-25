@@ -6,8 +6,8 @@
                 {{ __('Books') }}
             </h2>
             <button x-data='' x-on:click.prevent="$dispatch('open-modal',
-        'book-create')"
-                class="btn btn-primary">Create</button>
+        'book-create')" class="btn"
+                style="background-color: #1a99aa;color:white">Create</button>
         </div>
         <x-modal name="book-create">
             <form action="{{ route('book.store') }}" method="post" enctype="multipart/form-data">

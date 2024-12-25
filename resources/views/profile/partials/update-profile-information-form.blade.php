@@ -52,8 +52,13 @@
         <div>
             <x-input-label for="photo" :value="__('Profile Photo')" />
             <div style="width:150px;height:150px; background-color:#f3f4f6;"
-                class=" overflow-hidden rounded-circle mb-3"><img src="storage/{{ Auth::user()->photo }}"
-                    alt=""></div>
+                class=" overflow-hidden rounded-circle mb-3">
+                @if (Auth::user()->photo)
+                    <img src="storage/{{ Auth::user()->photo }}">
+                @else
+                    <img src="../resources/img/download.jpg">
+                @endif
+            </div>
             <x-text-input id="photo" name="photo" type="file" class="mt-1 block w-full" accept="image/*" />
             <x-input-error class="mt-2" :messages="$errors->get('photo')" />
         </div>

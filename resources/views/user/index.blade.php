@@ -10,9 +10,8 @@
                 {{ __('Users') }}
             </h2>
             <button x-data='' x-on:click.prevent="$dispatch('open-modal',
-        'user-create')"
-                class="btn
-                btn-primary">Create</button>
+        'user-create')" class="btn"
+                style="background-color: #1a99aa;color:white">Create</button>
         </div>
         <x-modal name="user-create">
             <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
@@ -77,7 +76,7 @@
                                 <img src="data:image/jpeg;base64,{{ $user->photo }}" alt="{{ $user->name }}'s Photo"
                                     style="width:150px;height:150px" class="card-img-top rounded-circle">
                             @else
-                                <img src="{{ asset('resources/img/download.jpg') }}" style="width:150px;height:150px"
+                                <img src="{{ asset('../resources/img/download.jpg') }}" style="width:150px;height:150px"
                                     class="card-img-top rounded-circle" />
                             @endif
 
@@ -224,7 +223,7 @@
 
                         </form>
                         <div class="mt-4">
-                            <form action="" method="post" id="penaltyAddForm">
+                            <form action="asdf.php" method="post" id="penaltyAddForm">
                                 @csrf
                                 <select id="penalty-dropdown"
                                     class=" form-select mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">

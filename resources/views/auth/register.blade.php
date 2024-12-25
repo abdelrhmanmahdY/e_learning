@@ -55,7 +55,7 @@
                         <x-text-input id="confpass" class="form-control confpass" type="password"
                             name="password_confirmation" required autocomplete="new-password" />
 
-                        <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                        <x-input-label for="confpass" :value="__('Confirm Password')" />
                     </div>
                 </div>
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
