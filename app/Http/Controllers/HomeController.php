@@ -10,7 +10,8 @@ use App\Models\Purchase;
 
 
 class HomeController extends Controller
-public function index()
+{
+    public function index()
     {
         // Get the top 3 most borrowed books
         $mostBorrowedBooks = Book::select('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price')
