@@ -1,14 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        @if (session('success'))
-            <div class="alert alert-success"> success</div>
-        @endif
 
         <div class="d-flex justify-content-between ">
             <h2
                 class="mb-0 d-flex justify-content-center align-items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Users') }}
             </h2>
+            @if (session('success'))
+                <div class="alert alert-success p-1 w-50 text-center" style="margin: 0;padding:0;
+            "> success
+                </div>
+            @endif
+
             <button x-data='' x-on:click.prevent="$dispatch('open-modal',
         'user-create')" class="btn"
                 style="background-color: #1a99aa;color:white">Create</button>
@@ -223,58 +226,57 @@
 
                         </form>
                         <div class="mt-4">
-<<<<<<< HEAD
-                       
-                            <form action=" {{ route('user.addPenalty', ['user' => $user->id]) }}" method="post" id="penaltyAddForm">
+                            <<<<<<< HEAD <form action=" {{ route('user.addPenalty', ['user' => $user->id]) }}"
+                                method="post" id="penaltyAddForm">
                                 @csrf
                                 <select name="penalty_id" class="form-select" required>
                                     <option value="">Select Penalty</option>
                                     @foreach ($penalties as $penalty)
-                                        <option value="{{ $penalty->id }}">{{ $penalty->severity_level }} </option>
+                                        <option value="{{ $penalty->id }}">{{ $penalty->severity_level }}
+                                        </option>
                                     @endforeach
                                 </select>
 
 
-                           
+
 
                         </div>
                         <div class="d-flex justify-content-center mt-4">
-                      
-                           
+
+
 
                         </div>
 
                         </form>
-                        <button     form="penaltyAddForm" class="btn btn-primary   mb-4">Add</button>
-                            
+                        <button form="penaltyAddForm" class="btn btn-primary   mb-4">Add</button>
+
                         <!-- <form action="" method="post" id="penaltyAddForm">
 =======
-                            <form action="asdf.php" method="post" id="penaltyAddForm">
+<form action="asdf.php" method="post" id="penaltyAddForm">
 >>>>>>> 34e838908fe73359cc16dac6f8c12982ccee67dd
-                                @csrf
-                                <select id="penalty-dropdown"
-                                    class=" form-select mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
-                                    <option value="">Select a penalty</option>
-                                    @foreach ($user->penalties->groupBy('duration') as $duration => $penalties)
-                                        <optgroup label="{{ $duration }}">
-                                            @foreach ($penalties as $penalty)
-                                                <option value="{{ $penalty->id }}">{{ $penalty->penalty_type }}
-                                                </option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
+@csrf
+<select id="penalty-dropdown"
+class=" form-select mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
+<option value="">Select a penalty</option>
+@foreach ($user->penalties->groupBy('duration') as $duration => $penalties)
+<optgroup label="{{ $duration }}">
+@foreach ($penalties as $penalty)
+<option value="{{ $penalty->id }}">{{ $penalty->penalty_type }}
+</option>
+@endforeach
+</optgroup>
+@endforeach
+</select>
 
 
-                            </form>
+</form>
 
-                        </div>
-                        <div class="d-flex justify-content-center mt-4">
-                            <button form="penaltyAddForm" class="btn btn-primary   mb-4">Add</button>
-                            
-                            <button form="penaltyDeleteForm" class="btn btn-danger ms-3 mb-4 ">Delete</button>
+</div>
+<div class="d-flex justify-content-center mt-4">
+<button form="penaltyAddForm" class="btn btn-primary   mb-4">Add</button>
+<button form="penaltyDeleteForm" class="btn btn-danger ms-3 mb-4 ">Delete</button>
 
-                        </div> -->
+</div> -->
 
                     </x-modal>
                 </div>

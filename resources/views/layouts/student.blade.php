@@ -48,10 +48,11 @@
 
                 </ul>
                 <form class="d-flex" role="search" action="{{ route('home') }}" method="GET">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" value="{{ request()->query('query') }}">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                        name="query" value="{{ request()->query('query') }}">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
-  
+
                 @if (Route::has('login'))
 
                     @auth
@@ -60,7 +61,8 @@
                             <div class=" rounded-circle me-2 overflow-hidden"
                                 style="width:50px;height:50px; background-color:#f3f4f6">
                                 @if (Auth::user()->photo)
-                                    <img src="storage/{{ Auth::user()->photo }}" alt="">
+                                    <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}"
+                                        alt="">
                                 @else
                                     <img src="/e_learning/resources/img/download.jpg">
                                 @endif

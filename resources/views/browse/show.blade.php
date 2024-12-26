@@ -31,7 +31,7 @@
                                 <output class="mb-1" name="price" for="date"></output>
                                 <br>
                                 @if ($book->purchase_price > 1)
-                                    <button class="purchies btn" value="purchies"
+                                    <button class="purchies btn" name="submit" value="purchies"
                                         style="background-color: #1a99aa;color:white">Purchies</button>
                                 @endif
                             @else
@@ -42,7 +42,12 @@
                     </div>
                 </div>
                 <div>
-                    <div class="bookshape" style="background-image: "></div>
+                    <div class="bookshape"
+                        style="background-image:url(data:image/jpeg;base64,{{ base64_encode($book->photo) }});background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+} ">
+                    </div>
                     <h3 class="mt-2 text-center">Price : {{ $book->purchase_price }}$</h3>
 
                 </div>

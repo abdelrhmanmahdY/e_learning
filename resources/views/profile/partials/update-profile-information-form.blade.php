@@ -54,7 +54,7 @@
             <div style="width:150px;height:150px; background-color:#f3f4f6;"
                 class=" overflow-hidden rounded-circle mb-3">
                 @if (Auth::user()->photo)
-                    <img src="storage/{{ Auth::user()->photo }}">
+                    <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}">
                 @else
                     <img src="../resources/img/download.jpg">
                 @endif

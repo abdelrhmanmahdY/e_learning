@@ -8,7 +8,10 @@
                         <div class="row analize row-cols-3 gap-5">
                             @foreach ($mostBorrowedBooks as $mostborrow)
                                 <div class=" col rounded book-shape d-flex flex-wrap justify-content-center  "
-                                    style="background-img: ;   ">
+                                    style="background-image:url(data:image/jpeg;base64,{{ base64_encode($mostborrow->photo) }});background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+">
                                 </div>
                             @endforeach
 
@@ -24,8 +27,11 @@
                         <div class="row row-cols-3 analize  gap-5">
                             @foreach ($mostPurchasedBooks as $mostpurchase)
                                 <div class=" col rounded book-shape d-flex flex-wrap justify-content-center  "
-                                    style="background-img:;  ">
-                                    df
+                                    style="background-image:url(data:image/jpeg;base64,{{ base64_encode($mostpurchase->photo) }});background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+">
+
                                 </div>
                             @endforeach
 
@@ -41,8 +47,11 @@
                         <div class="row analize  row-cols-3   gap-5">
                             @foreach ($newestBooks as $newbook)
                                 <div class=" col rounded book-shape d-flex flex-wrap justify-content-center  "
-                                    style="background-img:;">
-                                    df
+                                    style="background-image:url(data:image/jpeg;base64,{{ base64_encode($newbook->photo) }});background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+">
+
                                 </div>
                             @endforeach
                         </div>
@@ -52,5 +61,6 @@
             </section>
         </main>
     </x-slot>
-    <x-slot name="script"></x-slot>
+    <x-slot name="script">
+    </x-slot>
 </x-student-layout>

@@ -8,10 +8,8 @@
                             @foreach ($books as $book)
                                 <a href="{{ route('browse.show', $book->id) }}     "
                                     class=" col rounded book-shape d-flex flex-wrap justify-content-center  "
-                                    style="background-img:{{}};   width: 
-                               250px;
-   height: 300px;">
-                                    df
+                                    style="  background-image:url(data:image/jpeg;base64,{{ base64_encode($book->photo) }});background-repeat: no-repeat; background-position: center;background-size: cover;   width: 250px;height: 300px;">
+
                                 </a>
                             @endforeach
                         </div>
