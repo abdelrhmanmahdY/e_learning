@@ -20,6 +20,7 @@
                         <th>Pdf</th>
                         <th>Price</th>
                         <th>Availability</th>
+                        <th>photo</th>
 
                     </x-slot>
                     <x-slot name="tableBody">

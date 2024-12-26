@@ -14,7 +14,7 @@
                 style="background-color: #1a99aa;color:white">Create</button>
         </div>
         <x-modal name="user-create">
-            <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('user.stor') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <x-table>
                     <x-slot name="tableHead">
@@ -113,7 +113,7 @@
                             <x-slot name="tableBody">
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->roles[0]->role_name }}</td>
+                                <td>{{ $user->roles->pluck('role_name')->join(', ')  }}</td>
 
 
                             </x-slot></x-table>

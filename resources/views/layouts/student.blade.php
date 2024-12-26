@@ -47,11 +47,12 @@
                     @endif
 
                 </ul>
-                <form class="d-flex" role="search" action="{{ route('home') }}" method="GET">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" value="{{ request()->query('query') }}">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-  
+                <form class="d-flex" role="search" method="GET" action="{{ route('browse.index') }}">
+                    
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" value="{{ request('search') }}">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
                 @if (Route::has('login'))
 
                     @auth
