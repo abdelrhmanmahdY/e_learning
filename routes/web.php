@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post("/books", [BookController::class, 'store'])->name('book.store');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('book.update');
     Route::post('/books/{book}', [BookController::class, 'destroy'])->name('book.destroy');
+    Route::post('/browse', [BrowseController::class, 'store'])->name('browse.store');
 });
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);

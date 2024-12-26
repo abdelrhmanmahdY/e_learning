@@ -64,8 +64,8 @@
                 <div class="input-group input-group-lg w-75 mt-4">
                     <span class="input-group-text" id="inputGroup-sizing-lg"><i class="fa-solid fa-image"></i></span>
                     <div class="form-floating">
-                        <x-text-input id="photo" class="form-control" type="file" name="photo"
-                            accept="image/*" />
+                    <input type="file" id="photo" name="photo" class="form-control"
+                    accept="image/*">
                         <x-input-label for="photo" :value="__('Profile Photo')" />
                     </div>
                 </div>

@@ -17,12 +17,13 @@
                     <div class="buttons
                         mt-5">
                         @if ($book->availability)
-                            <form action="" method="post">
+                            <form action="{{ route('browse.store') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="user_id" value="{{ encrypt(Auth::user()->id) }}">
                                 <input type="hidden" name="book_id" value="{{ encrypt($book->id) }}">
 
-                                <x-text-input type="date" id="date" name="date" />
+
+                                <x-text-input type="date" id="date" name="borrow_date" />
 
 
                                 <button class="borrow btn " onclick="return validateDate()" value="borrow"
