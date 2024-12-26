@@ -1,26 +1,47 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BrowseController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Gate;
+
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get(
+    '/',
+    [HomeController::class, 'index']
+)->name('home');
+
+Route::get('/browse', [BrowseController::class, 'index'])->name('browse.index');
+Route::get('/browse/{id}', [BrowseController::class, 'show'])->name('browse.show');
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/libraries', function () {
-    return view('library.index');
-})->middleware(['auth', 'verified'])->name('library.index');
+Route::get('/pdf', function () {
+    return view('book.pdf');
+})->middleware(['auth', 'verified'])->name('pdf.index');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/users', [UserController::class, 'index'])->name('user.index');
+    Route::post('/users', [UserController::class, 'index'])->name('user.index');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::post('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::post('/user/{user}', [UserController::class, 'addPenalty'])->name('user.addPenalty');
     Route::get("/books", [BookController::class, 'index'])->name('book.index');
     Route::post("/books", [BookController::class, 'store'])->name('book.store');
+    Route::put('/books/{book}', [BookController::class, 'update'])->name('book.update');
+    Route::post('/books/{book}', [BookController::class, 'destroy'])->name('book.destroy');
+    Route::post('/browse', [BrowseController::class, 'store'])->name('browse.store');
+});
+Route::middleware('auth')->group(function () {
+    Route::resource('users', UserController::class);
 });
 
 Route::middleware('auth')->group(function () {
@@ -33,7 +54,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
-Route::middleware('auth')->get('/users', [UserController::class, 'index'])->middleware(['auth', 'user']);
+
+
+
 
 Gate::define('isAdmin', function ($user) {
     return $user->hasRole('admin');

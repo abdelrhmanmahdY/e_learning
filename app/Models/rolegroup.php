@@ -19,6 +19,6 @@ class rolegroup extends Model
 
     public function role()
     {
-        return $this->belongsTo(role::class);
+        return $this->belongsTo(Role::class);
     }
 }

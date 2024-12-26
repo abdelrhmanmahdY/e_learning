@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -21,7 +22,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
         'photo',
     ];
 
@@ -49,14 +49,22 @@ class User extends Authenticatable
     }
     public function roles()
     {
-  
-            return $this->belongsToMany(Role::class, 'rolegroup', 'user_id', 'role_id');
-      
+
+        return $this->belongsToMany(Role::class, 'rolegroup', 'user_id', 'role_id');
     }
 
     // Helper method to check if user has a certain role
     public function hasRole($roleName)
     {
         return $this->roles()->where('role_name', $roleName)->exists();
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function penalties()
+    {
+        return $this->belongsToMany(Penalty::class, 'havepenalties', 'user_id', 'penalties_id');
     }
 }

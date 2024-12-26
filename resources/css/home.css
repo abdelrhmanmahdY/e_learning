@@ -1,0 +1,146 @@
+a {
+    text-decoration: none;
+}
+
+.btn-outline-success {
+    --bs-btn-color: #ee6d5a;
+    --bs-btn-border-color: #ee6d5a;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #ee6d5a;
+    --bs-btn-hover-border-color: #ee6d5a;
+    --bs-btn-focus-shadow-rgb: 25, 135, 84;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #ee6d5a;
+    --bs-btn-active-border-color: #ee6d5a;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #ee6d5a;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: #ee6d5a;
+    --bs-gradient: none;
+}
+
+main {
+    height: calc(100vh - 66px);
+}
+
+section {
+    padding-block: 50px;
+}
+
+section.show {
+    padding-block: 50px 0px;
+}
+
+.background {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 40%, rgba(26, 153, 170, 1) 100%);
+}
+
+.rbackground {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 40%, rgba(26, 153, 170, 1) 100%);
+}
+
+h1 {
+    font-family: "Fira Sans", serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
+h2 {
+    font-family: "Fira Sans", serif;
+    font-weight: 500;
+    font-style: italic;
+}
+
+h3 {
+    font-family: "Fira Sans", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.time {
+    font-family: "Fira Sans", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.most {
+    backdrop-filter: sepia(80%);
+    padding-block-end: 15px;
+    border-radius: 20px;
+}
+
+.bookshape {
+    width: 22em;
+    height: 33em;
+    background-color: black;
+    max-width: 100%;
+
+}
+
+.book-shape {
+    width: 6em;
+    height: 9em;
+    background-color: black;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    main.show {
+        height: 100%;
+        background: rgb(255, 255, 255);
+        background: linear-gradient(0deg, rgba(255, 255, 255, 1) 40%, rgb(236 110 88) 100%);
+    }
+
+    section.show {
+        flex-direction: column-reverse;
+    }
+
+    h1.q {
+        margin-top: 0.5rem;
+    }
+
+    .buttons {
+        margin-top: 0.5rem !important;
+    }
+
+
+}
+
+@media (max-width: 380px) {
+    .book-shape {
+        width: 5em;
+        height: 8em;
+    }
+}
+
+@media (min-width: 576px) {
+    .book-shape {
+        width: 8em;
+        height: 13em;
+    }
+}
+
+@media (min-width: 768px) {
+    .book-shape {
+        width: 12em;
+        height: 17em;
+
+    }
+}
+
+@media (min-width: 992px) {
+    .book-shape {
+        width: 17em;
+        height: 22em;
+
+    }
+}
+
+@media (min-width: 1200px) {
+    .book-shape {
+        width: 21em;
+        height: 26em;
+    }
+}

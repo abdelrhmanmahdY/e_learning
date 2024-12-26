@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); 
             $table->string('penalty_type'); 
             $table->text('description')->nullable(); 
-            $table->string('duration')->nullable();  
+            $table->date('duration')->nullable();  
             $table->enum('severity_level',['HIGH', 'LOW',])->nullable(); 
             $table->timestamps();  
         });
