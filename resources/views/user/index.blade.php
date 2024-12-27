@@ -8,7 +8,13 @@
             </h2>
             @if (session('success'))
                 <div class="alert alert-success p-1 w-50 text-center" style="margin: 0;padding:0;
-            "> success
+            ">
+                    {{ session('success') }}
+                </div>
+            @elseif(session('error'))
+                <div class="alert alert-danger p-1 w-50 text-center" style="margin: 0;padding:0;
+            ">
+                    {{ session('error') }}
                 </div>
             @endif
 
@@ -17,7 +23,7 @@
                 style="background-color: #1a99aa;color:white">Create</button>
         </div>
         <x-modal name="user-create">
-            <form action="{{ route('user.stor') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <x-table>
                     <x-slot name="tableHead">
@@ -116,7 +122,7 @@
                             <x-slot name="tableBody">
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->roles->pluck('role_name')->join(', ')  }}</td>
+                                <td>{{ $user->roles->pluck('role_name')->join(', ') }}</td>
 
 
                             </x-slot></x-table>
@@ -136,6 +142,7 @@
                         <form action="{{ route('user.destroy', ['user' => $user->id]) }}" method="POST"
                             style="display:inline;">
                             @csrf
+                            @method('DELETE')
 
 
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">

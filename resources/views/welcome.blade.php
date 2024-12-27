@@ -12,6 +12,7 @@
     background-position: center;
     background-size: cover;
 ">
+
                                 </div>
                             @endforeach
 

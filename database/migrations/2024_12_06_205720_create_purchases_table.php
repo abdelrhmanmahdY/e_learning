@@ -12,7 +12,7 @@ class CreatePurchasesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
-            $table->date('purchase_date');
+            $table->timestamp('purchase_date');
             $table->timestamps();
         });
     }

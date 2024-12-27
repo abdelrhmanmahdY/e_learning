@@ -21,7 +21,6 @@
                         <th>Pdf</th>
                         <th>Price</th>
                         <th>Availability</th>
-                        <th>photo</th>
 
                     </x-slot>
                     <x-slot name="tableBody">
@@ -193,7 +192,8 @@
                             <x-input-error :messages="$errors->get('title')" class="mt-2" />
                             <x-input-error :messages="$errors->get('author')" class="mt-2" />
                             <x-input-error :messages="$errors->get('category')" class="mt-2" />
-                            <x-input-error :messages="$errors->get('photo')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('book-photo')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('pdf_url')" class="mt-2" />
 
 
                             <div class="d-flex justify-content-center">

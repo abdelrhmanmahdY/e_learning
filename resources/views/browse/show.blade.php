@@ -16,7 +16,15 @@
 
                     <div class="buttons
                         mt-5">
-                        @if ($book->availability)
+                        @if ($hasPurchased)
+                            <form action="{{ route('pdf.index') }}" method="get">
+                                @csrf
+                                <input type="hidden" name="pdf_url" value="{{ encrypt($book->pdf_url) }}">
+
+                                <button class="btn " style="background-color: #1a99aa;color:white;">Start
+                                    Read</button>
+                            </form>
+                        @else
                             <form action="{{ route('browse.store') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="user_id" value="{{ encrypt(Auth::user()->id) }}">
@@ -25,21 +33,23 @@
 
                                 <x-text-input type="date" id="date" name="borrow_date" />
 
-
-                                <button class="borrow btn " onclick="return validateDate()" value="borrow"
-                                    style="background-color: #1a99aa;color:white">Borrow</button>
-                                <br>
-                                <output class="mb-1" name="price" for="date"></output>
-                                <br>
-                                @if ($book->purchase_price > 1)
-                                    <button class="purchies btn" name="submit" value="purchies"
-                                        style="background-color: #1a99aa;color:white">Purchies</button>
+                                @if ($book->availability)
+                                    <button class="borrow btn " name='submit' value="borrow"
+                                        onclick="return validateDate()" value="borrow"
+                                        style="background-color: #1a99aa;color:white">Borrow</button>
+                                    <br>
+                                    <output class="mb-1" name="price" for="date"></output>
+                                    <br>
+                                    @if ($book->purchase_price > 1)
+                                        <button class="purchies btn" name="submit" value="purchies"
+                                            style="background-color: #1a99aa;color:white">Purchies</button>
+                                    @endif
+                                @else
+                                    <button class="reserve btn" value="reserve" name="submit"
+                                        style="background-color: #1a99aa;color:white">Reserve</button>
                                 @endif
-                            @else
-                                <button class="reserve btn" value="reserve"
-                                    style="background-color: #1a99aa;color:white">Reserve</button>
+                            </form>
                         @endif
-                        </form>
                     </div>
                 </div>
                 <div>

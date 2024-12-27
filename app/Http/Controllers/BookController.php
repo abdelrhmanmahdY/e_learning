@@ -73,8 +73,19 @@ class BookController extends Controller
         $book->category = $validatedData['category'];
         $book->availability = $validatedData['availability'];
         $book->purchase_price = $validatedData['purchase_price'];
+        if ($request->hasFile('pdf_url')) {
+            $file = $request->pdf_url;
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $request->pdf_url->move('assets', $fileName);
 
 
+            $book->pdf_url = $fileName;
+        }
+        if ($request->hasFile('book-photo')) {
+            $file = $request->file('book-photo');
+            $imageData = file_get_contents($file);
+            $book->photo = $imageData;
+        }
 
         $book->save();
 

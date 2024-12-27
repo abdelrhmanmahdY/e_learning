@@ -45,7 +45,7 @@ class UserController extends Controller
             }
         }
 
-        return view('user.index', compact('users', 'roles','penalties'));
+        return view('user.index', compact('users', 'roles', 'penalties'));
     }
 
 
@@ -117,15 +117,15 @@ class UserController extends Controller
         if (!Gate::allows('isAdmin')) {
             abort(403);
         }
-
         $user = User::findOrFail($id);
+        if (Auth::check() && Auth::user()->getAuthIdentifier() == $user['id']) {
+            return redirect()->back()->with('error', 'You cannot delete yourself!');
+        } else {
 
-
-        $user->roles()->detach();
-
-        $user->delete();
-
-        return redirect()->route('user.index')->with('success', 'User deleted successfully!');
+            $user->roles()->detach();
+            $user->delete();
+            return redirect()->route('user.index')->with('success', 'User deleted successfully!');
+        }
     }
 
 
@@ -152,6 +152,4 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'Penalty added to the student successfully!');
     }
-
-
 }

@@ -23,10 +23,10 @@ class HomeController extends Controller
             ->get();
 
         // Get the top 3 most purchased books
-        $mostPurchasedBooks = Book::select('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price')
+        $mostPurchasedBooks = Book::select('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price', 'books.photo')
             ->join('purchases', 'books.id', '=', 'purchases.book_id')
-            ->selectRaw('count(purchases.id) as purchase_count')
-            ->groupBy('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price')
+            ->selectRaw('count(purchases.book_id) as purchase_count')
+            ->groupBy('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price', 'books.photo')
             ->orderByDesc('purchase_count')
             ->take(3)
             ->get();

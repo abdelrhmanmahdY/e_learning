@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Borrows;
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\Purchase;
 use Illuminate\Support\Facades\Log;
 
 
@@ -30,48 +31,78 @@ class BrowseController extends Controller
     public function show(Request $request)
     {
         $book = Book::findOrFail($request->id);
+        $userId = auth()->id(); // it is working to get the user id, don't delete it
+        $hasPurchased = Purchase::where('user_id', $userId)
+            ->where('book_id', $book->id)
+            ->exists();
 
 
-        return view('browse.show', compact('book'));
+
+        return view('browse.show', compact('book', 'hasPurchased'));
     }
     public function store(Request $request)
     {
         Log::info('Request data: ', $request->all());
+        if ($request->get('submit') == 'borrow') {
+            $validatedData = $request->validate([
+                'user_id' => 'required',
+                'book_id' => 'required',
+                'borrow_date' => 'required|date|after_or_equal:today',
+            ]);
 
-        $validatedData = $request->validate([
-            'user_id' => 'required',
-            'book_id' => 'required',
-            'borrow_date' => 'required|date|after_or_equal:today',
-        ]);
+            Log::info('Validated data: ', $validatedData);
 
-        Log::info('Validated data: ', $validatedData);
+            $userId = decrypt($validatedData['user_id']);
+            $bookId = decrypt($validatedData['book_id']);
 
-        $userId = decrypt($validatedData['user_id']);
-        $bookId = decrypt($validatedData['book_id']);
+            Log::info('Decrypted user_id: ' . $userId);
+            Log::info('Decrypted book_id: ' . $bookId);
 
-        Log::info('Decrypted user_id: ' . $userId);
-        Log::info('Decrypted book_id: ' . $bookId);
+            $book = Book::findOrFail($bookId);
+            if (!$book->availability) {
+                return back()->withErrors(['book_id' => 'This book is currently unavailable for borrowing.']);
+            }
 
-        $book = Book::findOrFail($bookId);
-        if (!$book->availability) {
-            return back()->withErrors(['book_id' => 'This book is currently unavailable for borrowing.']);
+            // Create the borrow record
+            $borrow = new Borrows();
+            $borrow->user_id = $userId;
+            $borrow->book_id = $bookId;
+            $borrow->borrow_date = $request->borrow_date;
+            $borrow->due_date = date('Y-m-d', strtotime($request->borrow_date . ' +7 days')); // Example due date logic
+            $borrow->save();
+
+            Log::info('Borrow record saved: ' . $borrow->id);
+
+            // Update book availability
+            $book->availability = false;
+            $book->save();
+
+            return redirect()->route('browse.index')->with('success', 'Book borrowed successfully!');
+        } else if ($request->get('submit') == 'purchies') {
+            $validatedData = $request->validate([
+                'user_id' => 'required',
+                'book_id' => 'required',
+            ]);
+
+            $userId = decrypt($validatedData['user_id']);
+            $bookId = decrypt($validatedData['book_id']);
+
+            $book = Book::findOrFail($bookId);
+
+            // Create the purchase record
+            $purchase = new Purchase();
+            $purchase->user_id = $userId;
+            $purchase->book_id = $bookId;
+
+            $purchase->save();
+            $book->availability = 0;
+            $book->save();
+
+            Log::info('Purchase record saved: ' . $purchase->id);
+
+
+            return redirect()->route('browse.show', ['id' => $bookId])->with('success', 'Book purchased successfully!');
         }
-
-        // Create the borrow record
-        $borrow = new Borrows();
-        $borrow->user_id = $userId;
-        $borrow->book_id = $bookId;
-        $borrow->borrow_date = $request->borrow_date;
-        $borrow->due_date = date('Y-m-d', strtotime($request->borrow_date . ' +7 days')); // Example due date logic
-        $borrow->save();
-
-        Log::info('Borrow record saved: ' . $borrow->id);
-
-        // Update book availability
-        $book->availability = false;
-        $book->save();
-
-        return redirect()->route('browse.index')->with('success', 'Book borrowed successfully!');
     }
     // public function destroy(Request $request, $id)
     // {    $borrow->user()->detach();

@@ -5,6 +5,7 @@ use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 use Illuminate\Support\Facades\Route;
@@ -22,9 +23,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/pdf', function () {
-    return view('book.pdf');
+Route::get('/pdf', function (Request $request) {
+    $pdf = decrypt($request->pdf_url);
+    return view('book.pdf', compact('pdf'));
 })->middleware(['auth', 'verified'])->name('pdf.index');
+
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
