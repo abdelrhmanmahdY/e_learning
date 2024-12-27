@@ -32,9 +32,10 @@
                 <div class=" rounded-circle me-2 overflow-hidden"
                     style="width:50px;height:50px; background-color:#f3f4f6">
                     @if (Auth::user()->photo)
-                        <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}" alt="">
+                        <img class='rounded-circle' style="width:50px;height:50px"
+                            src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}" alt="">
                     @else
-                        <img src="../resources/img/download.jpg">
+                        <img src="../resources/img/download.jpg" class='rounded-circle' style="width:50px;height:50px">
                     @endif
                 </div>
                 <x-dropdown align="right" width="48">

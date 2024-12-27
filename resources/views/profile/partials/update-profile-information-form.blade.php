@@ -54,9 +54,10 @@
             <div style="width:150px;height:150px; background-color:#f3f4f6;"
                 class=" overflow-hidden rounded-circle mb-3">
                 @if (Auth::user()->photo)
-                    <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}">
+                    <img class="rounded-circle" style="width:150px;height:150px;"
+                        src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}">
                 @else
-                    <img src="../resources/img/download.jpg">
+                    <img src="../resources/img/download.jpg" class="rounded-circle" style="width:150px;height:150px;">
                 @endif
             </div>
             <x-text-input id="photo" name="photo" type="file" class="mt-1 block w-full" accept="image/*" />

@@ -37,7 +37,7 @@ class BrowseController extends Controller
     }
 
     public function show(Request $request)
-    {
+    {nav
         $book = Book::findOrFail($request->id);
         // if (!Gate::allows('isAdmin')) {
         //     abort(404);
