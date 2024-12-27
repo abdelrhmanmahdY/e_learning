@@ -17,6 +17,30 @@
         @csrf
         @method('patch')
 
+        <!-- Profile Photo Section -->
+        <div>
+            <x-input-label for="photo" :value="__('Profile Photo')" />
+            <div style="width:150px;height:150px; background-color:#f3f4f6;" 
+                class="overflow-hidden rounded-circle mb-3">
+                @if (Auth::user()->photo)
+                    <img src="storage/{{ Auth::user()->photo }}">
+                @else
+                    <img src="../resources/img/download.jpg">
+                @endif
+            </div>
+            <div class="d-flex gap-3 align-items-center">
+                <x-text-input id="photo" name="photo" type="file" class="form-control" accept="image/*" />
+                <!-- Bootstrap-styled Link for Deleting Profile Photo -->
+                <a href="#" onclick="event.preventDefault(); document.getElementById('delete-photo').value='1'; document.getElementById('photo-form').submit();"
+                    class="btn btn-danger btn-sm">
+                    {{ __('Delete Profile Picture') }}
+                </a>
+                <!-- Hidden input to trigger photo deletion -->
+                <input type="hidden" id="delete-photo" name="delete_photo" value="0">
+            </div>
+            <x-input-error class="mt-2" :messages="$errors->get('photo')" />
+        </div>
+
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
@@ -49,23 +73,9 @@
                 </div>
             @endif
         </div>
-        <div>
-            <x-input-label for="photo" :value="__('Profile Photo')" />
-            <div style="width:150px;height:150px; background-color:#f3f4f6;"
-                class=" overflow-hidden rounded-circle mb-3">
-                @if (Auth::user()->photo)
-                    <img src="storage/{{ Auth::user()->photo }}">
-                @else
-                    <img src="../resources/img/download.jpg">
-                @endif
-            </div>
-            <x-text-input id="photo" name="photo" type="file" class="mt-1 block w-full" accept="image/*" />
-            <x-input-error class="mt-2" :messages="$errors->get('photo')" />
-        </div>
 
-        <div class="flex items-center gap-4">
+        <div class="d-flex gap-3">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
-
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
                     class="text-sm text-gray-600 dark:text-gray-400">{{ __('Saved.') }}</p>

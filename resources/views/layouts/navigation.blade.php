@@ -7,6 +7,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}">
                         <img src="{{ asset('../resources/img/SUT_Logo-removebg-preview.png') }}" alt="sut log"
+                        
                             width="100px"> </a>
                 </div>
 

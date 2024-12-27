@@ -1,7 +1,9 @@
 @props([
     'name',
     'show' => false,
-    'maxWidth' => '2xl'
+    'maxWidth' => '2xl',
+    'imageUrl' => null, // User image URL
+    'bookImageUrl' => null, // Book image URL
 ])
 
 @php
@@ -73,6 +75,20 @@ $maxWidth = [
         x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
     >
+        {{-- Display the user image if the imageUrl prop is provided --}}
+        @if ($imageUrl)
+            <div class="relative mb-4">
+                <img src="{{ $imageUrl }}" alt="User Image" class="w-full h-auto object-contain" />
+            </div>
+        @endif
+
+        {{-- Display the book image if the bookImageUrl prop is provided --}}
+        @if ($bookImageUrl)
+            <div class="relative mb-4">
+                <img src="{{ $bookImageUrl }}" alt="Book Image" class="w-full h-auto object-contain" />
+            </div>
+        @endif
+
         {{ $slot }}
     </div>
 </div>
