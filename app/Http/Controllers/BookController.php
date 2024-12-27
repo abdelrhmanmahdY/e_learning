@@ -50,7 +50,7 @@ class BookController extends Controller
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $imageData = file_get_contents($file);
-            $user->photo = $imageData;
+            $book->photo = $imageData;
         }
        $book->save();
 
@@ -65,6 +65,7 @@ class BookController extends Controller
             'availability' => 'required|boolean',
             'pdf_url' => 'nullable|file|mimes:pdf|max:10240',
             'purchase_price' => 'nullable|numeric|min:0',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
     
         $book = Book::findOrFail($id);
@@ -74,7 +75,11 @@ class BookController extends Controller
         $book->availability = $validatedData['availability'];
         $book->purchase_price = $validatedData['purchase_price'];
     
-     
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $imageData = file_get_contents($file);
+            $book->photo = $imageData;
+        }
     
         $book->save();
     

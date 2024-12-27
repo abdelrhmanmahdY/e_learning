@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 use App\Models\Borrows;
 use Illuminate\Http\Request;
 use App\Models\Book;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Gate;
 class BrowseController extends Controller
 {
 
     public function index(Request $request)
-    {
+    {    if (!Auth::check()) {
+        return redirect()->route('login'); // Redirect to login page if not authenticated
+    }
+
         $search = $request->input('search');
 
         if ($search) {
@@ -27,7 +32,9 @@ class BrowseController extends Controller
     public function show(Request $request)
     {
         $book = Book::findOrFail($request->id);
-
+        if (!Gate::allows('isAdmin')) {
+            abort(404);
+        }
 
         return view('browse.show', compact('book'));
     }

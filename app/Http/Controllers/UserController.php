@@ -32,7 +32,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if (!Gate::allows('isAdmin')) {
-            abort(403);
+            abort(404);
         }
 
         $users = User::with('roles')->get();
@@ -50,7 +50,9 @@ class UserController extends Controller
 
 
     public function update(Request $request, $id)
-    {
+    {     if (!Gate::allows('isAdmin')) {
+        abort(404);
+    }
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
@@ -82,7 +84,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         if (!Gate::allows('isAdmin')) {
-            abort(403);
+            abort(404);
         }
 
         $validatedData = $request->validate([
@@ -115,7 +117,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         if (!Gate::allows('isAdmin')) {
-            abort(403);
+            abort(404);
         }
 
         $user = User::findOrFail($id);
@@ -132,7 +134,7 @@ class UserController extends Controller
     public function addPenalty(Request $request, $id)
     {
         if (!Gate::allows('isAdmin')) {
-            abort(403);
+            abort(404);
         }
 
         $validatedData = $request->validate([

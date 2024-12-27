@@ -14,7 +14,7 @@
                 style="background-color: #1a99aa;color:white">Create</button>
         </div>
         <x-modal name="user-create">
-            <form action="{{ route('user.stor') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <x-table>
                     <x-slot name="tableHead">
