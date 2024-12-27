@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Purchase;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Log;
 
 
@@ -38,17 +39,38 @@ class BrowseController extends Controller
     public function show(Request $request)
     {
         $book = Book::findOrFail($request->id);
-        if (!Gate::allows('isAdmin')) {
-            abort(404);
-        }
+        // if (!Gate::allows('isAdmin')) {
+        //     abort(404);
+        // }
         $userId = auth()->id(); // it is working to get the user id, don't delete it
         $hasPurchased = Purchase::where('user_id', $userId)
             ->where('book_id', $book->id)
             ->exists();
 
+        // Check if the user has a reservation with status 'still'
+        $hasReserved = Reservation::where('user_id', $userId)
+            ->where('book_id', $book->id)
+            ->where('status', 'still')
+            ->exists();
+
+        // Check if this is the first reservation with status 'still'
+        $isFirstReservation = Reservation::where('book_id', $book->id)
+            ->where('status', 'still')
+            ->orderBy('reservation_date', 'asc')
+            ->first();
+
+        $isUserFirstReservation = $isFirstReservation && $isFirstReservation->user_id === $userId;
+
+        $isReservedDone = Reservation::where('book_id', $book->id)
+            ->where('status', 'done')
+            ->exists();
+
+        $isReserved = Reservation::where('book_id', $book->id)->exists();
 
 
-        return view('browse.show', compact('book', 'hasPurchased'));
+
+
+        return view('browse.show', compact('book', 'hasPurchased', 'isUserFirstReservation', 'isReservedDone', 'isReserved', 'hasReserved'));
     }
     public function store(Request $request)
     {
@@ -104,14 +126,49 @@ class BrowseController extends Controller
             $purchase->user_id = $userId;
             $purchase->book_id = $bookId;
 
+
+            $reservation = Reservation::where('user_id', $userId)
+                ->where('book_id', $bookId)
+                ->where('status', 'still')
+                ->first();
+
+
+            if ($reservation) {
+                $reservation->status = "done";
+                $reservation->save();
+            }
+
             $purchase->save();
+
             $book->availability = 0;
             $book->save();
 
-            Log::info('Purchase record saved: ' . $purchase->id);
+
 
 
             return redirect()->route('browse.show', ['id' => $bookId])->with('success', 'Book purchased successfully!');
+        } else if ($request->get('submit') == 'reserve') {
+            $validatedData = $request->validate([
+                'user_id' => 'required',
+                'book_id' => 'required',
+            ]);
+
+            $userId = decrypt($validatedData['user_id']);
+            $bookId = decrypt($validatedData['book_id']);
+
+            $book = Book::findOrFail($bookId);
+
+            // Create the reservation record
+            $reservation = new Reservation();
+            $reservation->user_id = $userId;
+            $reservation->book_id = $bookId;
+            $reservation->status =  "still";
+
+            $reservation->save();
+
+            Log::info('Reservation record saved: ' . $reservation->id);
+
+            return redirect()->route('browse.show', ['id' => $bookId])->with('success', 'Book reserved successfully!');
         }
     }
     // public function destroy(Request $request, $id)

@@ -9,11 +9,11 @@ class CreatePurchasesTable extends Migration
     public function up()
     {
         Schema::create('purchases', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->timestamp('purchase_date');
             $table->timestamps();
+            $table->primary(['user_id', 'book_id']);
         });
     }
 

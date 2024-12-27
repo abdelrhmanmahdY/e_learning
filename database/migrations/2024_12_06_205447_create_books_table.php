@@ -16,7 +16,7 @@ class CreateBooksTable extends Migration
             $table->boolean('availability');
             $table->binary('pdf_url')->nullable();
             $table->decimal('purchase_price', 10, 2)->nullable();
-            $table->binary('photo');
+            $table->binary('photo')->nullable();
             $table->timestamps();
         });
     }

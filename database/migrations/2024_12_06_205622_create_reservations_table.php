@@ -12,8 +12,8 @@ class CreateReservationsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
-            $table->enum('status', ['purchaised', 'borrowed',]);
-            $table->date('reservation_date');
+            $table->string('status');
+            $table->timestamp('reservation_date');
             $table->timestamps();
         });
     }
