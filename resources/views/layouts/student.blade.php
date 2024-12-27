@@ -62,8 +62,7 @@
                             <div class=" rounded-circle me-2 overflow-hidden"
                                 style="width:50px;height:50px; background-color:#f3f4f6">
                                 @if (Auth::user()->photo)
-                                    <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}"
-                                        alt="">
+                                <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}" alt="User Photo" />
                                 @else
                                     <img src="/e_learning/resources/img/download.jpg">
                                 @endif
