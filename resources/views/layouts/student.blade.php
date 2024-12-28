@@ -27,7 +27,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
             <a href="{{ route('home') }}">
-                <img src="{{ asset('../resources/img/SUT_Logo-removebg-preview.png') }}" alt="sut log" width="100px">
+                <img src="{{ asset('../resources/img/SUT_Logo-removebg-preview.png') }}" alt="sut log" width="140px">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
