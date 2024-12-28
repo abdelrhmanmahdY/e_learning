@@ -149,7 +149,7 @@
         </ul>
     </footer>
     <script>
-        const zoomButton = document.getElementById(" zoom");
+        const zoomButton = document.getElementById("zoom");
         const currentPage = document.getElementById("current_page");
         const viewer = document.querySelector(".pdf-viewer");
         let currentPDF = {};
@@ -162,7 +162,7 @@
                 zoom: 1.5,
             };
         }
-        loadPDF(); //url of pdf
+        loadPDF();
         zoomButton.addEventListener("input", () => {
             if (currentPDF.file) {
                 document.getElementById("zoomValue").innerHTML = zoomButton.value + "%";

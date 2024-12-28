@@ -43,7 +43,7 @@ class BrowseController extends Controller
         //     abort(404);
         // }
         $userId = auth()->id(); // it is working to get the user id, don't delete it
-        $hasPurchased = Purchase::where('user_id', $userId)
+        $hasPurchased = Purchase::where('user_id', $userId) 
             ->where('book_id', $book->id)
             ->exists();
 
