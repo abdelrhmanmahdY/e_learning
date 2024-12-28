@@ -1,96 +1,128 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2980b9;
+    --background-color: #f4f4f9;
+    --accent-color: #2c3e50;
+    --text-color-light: #ffffff;
+    --text-color-dark: #34495e;
+    --text-color-muted: #7f8c8d;
+    --button-bg-color: #3498db;
+    --button-hover-bg-color: #2980b9;
+    --button-active-bg-color: #2980b9;
+    --button-border-color: #3498db;
+    --button-disabled-bg-color: transparent;
+    --button-disabled-border-color: #3498db;
+    --gradient-background-start: rgba(240, 240, 240, 1);
+    --gradient-background-end: rgba(52, 152, 219, 1);
+    --gradient-reverse-start: rgba(240, 240, 240, 1);
+    --gradient-reverse-end: rgba(52, 152, 219, 1);
+}
+
 a {
     text-decoration: none;
+    color: var(--primary-color);
 }
 
 .btn-outline-success {
-    --bs-btn-color: #ee6d5a;
-    --bs-btn-border-color: #ee6d5a;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #ee6d5a;
-    --bs-btn-hover-border-color: #ee6d5a;
-    --bs-btn-focus-shadow-rgb: 25, 135, 84;
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #ee6d5a;
-    --bs-btn-active-border-color: #ee6d5a;
+    --bs-btn-color: var(--button-bg-color);
+    --bs-btn-border-color: var(--button-border-color);
+    --bs-btn-hover-color: var(--text-color-light);
+    --bs-btn-hover-bg: var(--button-hover-bg-color);
+    --bs-btn-hover-border-color: var(--button-border-color);
+    --bs-btn-focus-shadow-rgb: 52, 152, 219;
+    --bs-btn-active-color: var(--text-color-light);
+    --bs-btn-active-bg: var(--button-active-bg-color);
+    --bs-btn-active-border-color: var(--button-active-bg-color);
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #ee6d5a;
-    --bs-btn-disabled-bg: transparent;
-    --bs-btn-disabled-border-color: #ee6d5a;
+    --bs-btn-disabled-color: var(--button-bg-color);
+    --bs-btn-disabled-bg: var(--button-disabled-bg-color);
+    --bs-btn-disabled-border-color: var(--button-disabled-border-color);
     --bs-gradient: none;
 }
 
 main {
-    height: calc(100vh - 66px);
+    height: calc(100vh - 80px);
+    background-color: var(--background-color);
+    font-family: 'Open Sans', sans-serif;
 }
 
 section {
-    padding-block: 50px;
+    padding: 60px 20px;
+    background-color: var(--text-color-light);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 section.show {
-    padding-block: 50px 0px;
+    padding: 60px 20px 0;
 }
 
 .background {
-    background: rgb(255, 255, 255);
-    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 40%, rgba(26, 153, 170, 1) 100%);
+    background: var(--gradient-background-start);
+    background: linear-gradient(45deg, var(--gradient-background-start) 40%, var(--gradient-background-end) 100%);
 }
 
 .rbackground {
-    background: rgb(255, 255, 255);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 40%, rgba(26, 153, 170, 1) 100%);
+    background: var(--gradient-reverse-start);
+    background: linear-gradient(225deg, var(--gradient-reverse-start) 40%, var(--gradient-reverse-end) 100%);
 }
 
 h1 {
-    font-family: "Fira Sans", serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 700;
-    font-style: italic;
+    font-style: normal;
+    color: var(--accent-color);
 }
 
 h2 {
-    font-family: "Fira Sans", serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 500;
-    font-style: italic;
+    font-style: normal;
+    color: var(--text-color-dark);
 }
 
 h3 {
-    font-family: "Fira Sans", serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 400;
-    font-style: italic;
+    font-style: normal;
+    color: var(--text-color-muted);
 }
 
 .time {
-    font-family: "Fira Sans", serif;
-    font-weight: 400;
-    font-style: italic;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: var(--text-color-muted);
 }
 
 .most {
-    backdrop-filter: sepia(80%);
-    padding-block-end: 15px;
-    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    padding-bottom: 20px;
+    border-radius: 15px;
+    background: rgba(52, 152, 219, 0.5);
 }
 
 .bookshape {
-    width: 22em;
-    height: 33em;
-    background-color: black;
+    width: 24em;
+    height: 35em;
+    background-color: var(--accent-color);
     max-width: 100%;
-
+    border-radius: 15px;
 }
 
 .book-shape {
-    width: 6em;
-    height: 9em;
-    background-color: black;
+    width: 7em;
+    height: 10em;
+    background-color: var(--accent-color);
     max-width: 100%;
+    border-radius: 10px;
 }
 
 @media (max-width: 768px) {
     main.show {
         height: 100%;
         background: rgb(255, 255, 255);
-        background: linear-gradient(0deg, rgba(255, 255, 255, 1) 40%, rgb(236 110 88) 100%);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 1) 40%, rgba(236, 110, 88, 1) 100%);
     }
 
     section.show {
@@ -108,53 +140,45 @@ h3 {
     div.browse.row {
         flex-direction: column !important;
     }
-
-
 }
 
 @media (max-width: 380px) {
     .book-shape {
-        width: 5em;
-        height: 8em;
+        width: 6em;
+        height: 9em;
     }
 }
 
 @media (min-width: 576px) {
     .book-shape {
-        width: 8em;
-        height: 13em;
+        width: 9em;
+        height: 14em;
     }
 }
 
 @media (min-width: 768px) {
     .book-shape {
-        width: 12em;
-        height: 17em;
-
+        width: 13em;
+        height: 18em;
     }
 }
 
 @media (min-width: 992px) {
     .book-shape {
-        width: 17em;
-        height: 22em;
-
+        width: 18em;
+        height: 23em;
     }
-
-
 }
 
-@media(max-width:992px) {
+@media (max-width: 992px) {
     main {
-        height: calc(100vh - 56px);
+        height: calc(100vh - 70px);
     }
 }
 
 @media (min-width: 1200px) {
     .book-shape {
-        width: 21em;
-        height: 26em;
+        width: 22em;
+        height: 28em;
     }
-
-
 }
