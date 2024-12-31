@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::post('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
     Route::post('/user/{user}', [UserController::class, 'addPenalty'])->name('user.addPenalty');
+    Route::post('/user/{user}/penalties', [UserController::class, 'destroyPenalty'])->name('user.destroyPenalty');
     Route::get("/books", [BookController::class, 'index'])->name('book.index');
     Route::post("/books", [BookController::class, 'store'])->name('book.store');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('book.update');

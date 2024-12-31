@@ -4,7 +4,7 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <div class="container hi row justify-content-center">
         <div class="formain form rounded-4 p-1 pt-2 col-12 col-md-8 col-lg-6 col-xl-4">
-            <img src="{{ asset('../resources/img/SUT_Logo-removebg-preview.png') }}" alt="Sut logo" width="200px">
+            <img src="{{ asset('../resources/img/SUT_Logo-removebg-preview.png') }}" alt="Sut logo" width="140px">
 
             <form class="d-flex flex-column align-items-center" id="loginform" action="{{ route('password.email') }}"
                 method="post">

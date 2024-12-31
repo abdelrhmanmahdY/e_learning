@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Gate;
-
+use Carbon\Carbon;
 
 
 use Illuminate\Routing\Controller as BaseController;
@@ -142,16 +142,42 @@ class UserController extends Controller
         ]);
 
         $user = User::findOrFail($id);
-
-        // Check if the user has the "student" role
+        if ($user->hasPenalty($validatedData['penalty_id'])) {
+            return redirect()->back()->with('error', 'student already have Penalty.');
+        }
         if (!$user->roles->contains('role_name', 'student')) {
             return redirect()->back()->with('error', 'Only students can be assigned penalties.');
         }
-
         // Assign penalty
         $user->save();
         $user->penalties()->attach($validatedData['penalty_id']);
-
+        $penalties = Penalty::findOrFail($validatedData['penalty_id']);
+        if($penalties->severity_level){
+      $penalties->duration=Carbon::now()->addDays(7);}
+else{$penalties->duration=Carbon::now()->addDays(15);}
+      $penalties->save();
         return redirect()->back()->with('success', 'Penalty added to the student successfully!');
     }
+
+    
+    public function destroyPenalty($id, Request $request)
+    {
+        if (!Gate::allows('isAdmin')) {
+            abort(404);
+        }
+        $user = User::findOrFail($id);
+    
+        if (Auth::check() && Auth::user()->getAuthIdentifier() == $user->id) {
+            return redirect()->back()->with('error', 'You cannot delete yourself!');
+        } else {
+            // Retrieve selected penalty IDs from the request
+            $penaltyIds = $request->input('penalty_ids', []);
+            
+            // Detach the selected penalties from the user
+            $user->penalties()->detach($penaltyIds);
+            
+            return redirect()->route('user.index')->with('success', 'Selected penalties deleted successfully!');
+        }
+    }
+    
 }

@@ -1,5 +1,7 @@
     <x-student-layout>
+        
         <x-slot name="slot">
+      
             <main class="show"
                 style=" 
     background: rgb(255, 255, 255);
@@ -9,7 +11,11 @@
          align-items-center container show">
 
                     <div class="info   text-center">
+                        
                         <div class="aboutbook">
+                        
+        
+     
                             <h1 class="q"><q>{{ $book->title }}</q></h1>
                             <h2 class="mt-2">Author : {{ $book->author }}</h2>
                         </div>
@@ -95,6 +101,16 @@
                                         style="background-color:rgb(7, 219, 247);color:white">Reserve</button>
                                 </form>
                             @endif
+                          @if($isBorrowed)
+    
+                          <form action="{{ route('browse.store') }}" method="post">
+    @csrf
+    <input type="hidden" name="user_id" value="{{ encrypt(Auth::user()->id) }}">
+    <input type="hidden" name="book_id" value="{{ encrypt($book->id) }}">
+    <button type="submit" name="submit" value="returnbook" class="btn btn-warning" style="margin:10px;">Return</button>
+</form>
+
+    @endif
                         </div>
                     </div>
                     <div>

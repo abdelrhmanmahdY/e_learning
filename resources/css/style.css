@@ -1,32 +1,142 @@
-/* * Book style */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2980b9;
+    --background-color: #f4f4f9;
+    --accent-color: #2c3e50;
+    --text-color-light: #ffffff;
+    --text-color-dark: #34495e;
+    --text-color-muted: #7f8c8d;
+    --button-bg-color: #3498db;
+    --button-hover-bg-color: #2980b9;
+    --button-active-bg-color: #2980b9;
+    --button-border-color: #3498db;
+    --button-disabled-bg-color: transparent;
+    --button-disabled-border-color: #3498db;
+    --gradient-background-start: rgba(240, 240, 240, 1);
+    --gradient-background-end: rgba(52, 152, 219, 1);
+    --gradient-reverse-start: rgba(52, 152, 219, 1);
+    --gradient-reverse-end: rgba(240, 240, 240, 1);
+}
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: var(--gradient-background-start);
+    color: var(--text-color-dark);
+    margin: 0;
+    padding: 0;
+}
+
+/* Book Style */
 .book-shape {
     width: 150px;
     height: 200px;
-    background-color: white;
+    background-color: var(--background-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.book-shape:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Library Shape */
 .library-shape {
-    background-color: white;
+    background: linear-gradient(to right, var(--gradient-background-start), var(--gradient-background-end));
     height: 100px;
-    width: 0px;
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Availability Check */
 .available-check {
     width: 30px;
     height: 30px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* * User Style */
+.available-check::before {
+    content: "✔";
+    color: var(--secondary-color);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* User Style */
 .user-name-circle {
     position: relative;
+    display: inline-block;
+    padding-left: 30px;
+    color: var(--text-color-dark);
+    font-size: 1.2rem;
+    font-weight: bold;
 }
+
 .user-name-circle::before {
     content: "";
     position: absolute;
     width: 15px;
     height: 15px;
     border-radius: 50%;
+    background-color: var(--primary-color);
     left: 0;
     top: 50%;
     transform: translateY(-50%);
+}
+
+/* Button Styles */
+.button {
+    background-color: var(--button-bg-color);
+    color: var(--text-color-light);
+    border: 1px solid var(--button-border-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: var(--button-hover-bg-color);
+    transform: scale(1.05);
+}
+
+.button:active {
+    background-color: var(--button-active-bg-color);
+    transform: scale(0.95);
+}
+
+.button:disabled {
+    background-color: var(--button-disabled-bg-color);
+    border-color: var(--button-disabled-border-color);
+    color: var(--text-color-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Card Styles */
+.card {
+    background: linear-gradient(to bottom, var(--gradient-background-start), var(--gradient-background-end));
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    color: var(--text-color-dark);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }

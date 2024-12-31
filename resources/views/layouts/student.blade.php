@@ -66,8 +66,8 @@
                                         src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}"
                                         alt="User Photo" />
                                 @else
-                                    <img class="rounded-circle" style="width:50px;height:50px;"
-                                        src="/e_learning/resources/img/download.jpg">
+                                <img src="{{ asset('../resources/img/download.jpg') }}" style="width:150px;height:150px"
+                                class="card-img-top rounded-circle" />
                                 @endif
                             </div>
                             <x-dropdown align="right" width="48">

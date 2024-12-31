@@ -1,13 +1,23 @@
 :root {
-    --bg-color: #f8f9fa;
+    --primary-color: #3498db;
+    --secondary-color: #2980b9;
+    --background-color: #f4f4f9;
     --body-bg: #ffffff;
     --secondary-bg: #e9ecef;
     --body-color: #212529;
     --link-color: #573b85;
     --hover-color: #0dcaf0;
-    --shadow-color: rgba(0, 0, 0, 0.67);
+    --shadow-color: rgba(0, 0, 0, 0.15);
     --border-color: #495057;
     --input-border-color: #495057;
+    --text-color-light: #ffffff;
+    --text-color-dark: #34495e;
+    --text-color-muted: #7f8c8d;
+    --button-bg-color: #3498db;
+    --button-hover-bg-color: #2980b9;
+    --button-active-bg-color: #2980b9;
+    --gradient-primary: linear-gradient(135deg, #3498db, #2980b9);
+    --gradient-secondary: linear-gradient(135deg, #f4f4f9, #e9ecef);
 }
 
 html,
@@ -15,232 +25,152 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-}
-
-body {
-    background-color: var(--secondary-bg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    display: flex;
     font-family: "Roboto", sans-serif;
+    background: var(--gradient-secondary);
+    color: var(--body-color);
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .heading {
-    font-size: 2.5em !important;
-    font-weight: 900 !important;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 8px var(--shadow-color);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    margin-bottom: 1.5rem;
 }
 
-.main {
-    box-shadow: 1px 2px 71px -6px var(--shadow-color);
-    background-color: var(--body-bg);
-    opacity: 0;
-    transition: opacity 100ms ease-in;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.formain {
-    box-shadow: 1px 2px 71px -6px var(--shadow-color);
-    height: 470px;
-    opacity: 0;
-    transition: opacity 100ms ease-in;
-    background-color: var(--body-bg);
-}
-
+.main,
+.formain,
 .smain {
-    box-shadow: 1px 2px 71px -6px var(--shadow-color);
+    box-shadow: 0 8px 24px var(--shadow-color);
     background-color: var(--body-bg);
+    border-radius: 15px;
+    padding: 2rem;
     opacity: 0;
-    transition: opacity 100ms ease-in;
+    transform: scale(0.95);
+    transition: all 0.4s ease-in-out;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    position: absolute;
+    top: 2%;
+    transform: translate(-50%, -50%) scale(0.95);
 }
 
-.main.visible {
-    opacity: 1;
-}
-
-.formain.visible {
-    opacity: 1;
-}
-
-.formainnn.visible {
-    opacity: 1;
-}
-
+.main.visible,
+.formain.visible,
 .smain.visible {
     opacity: 1;
+    transform: scale(1);
 }
 
-.signUpp {
-    transition: all 200ms ease-in;
-    padding-bottom: 7px;
+.main h1,
+.formain h1,
+.smain h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 8px var(--shadow-color);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    margin-bottom: 1.5rem;
 }
 
-.signUpp:hover {
-    padding-bottom: 2px;
-    color: var(--hover-color) !important;
+.main img,
+.formain img,
+.smain img {
+    display: block;
+    margin: 0 auto 1.5rem auto;
+    max-width: 100px;
 }
 
-.signupspace {
-    margin-top: 3rem !important;
-}
-
-.signUp {
-    transition: all 100ms ease-in;
-    padding-bottom: 4px;
-    color: var(--body-color) !important;
-    text-decoration: none;
-}
-
-.signUp:hover {
-    border-bottom: 2px var(--link-color) solid;
-    color: var(--link-color) !important;
-    padding-bottom: 4px;
-}
-
-.loginn {
-    border-bottom: 0px solid var(--hover-color);
-    transition: all 50ms ease-in;
-    padding-bottom: 7px;
-    cursor: pointer;
-}
-
-.loginn:hover {
-    padding-bottom: 2px;
-    border-bottom: 1px solid var(--hover-color);
-    cursor: pointer;
-}
-
-.login {
-    padding-bottom: 10px;
-    cursor: pointer;
-    transition: all 100ms ease-in;
-    text-decoration: none;
-    color: RGBA(86, 94, 100, var(--bs-link-opacity, 1));
-}
-
-.login:hover {
-    color: var(--link-color) !important;
-    cursor: pointer;
-    border-bottom: 2px var(--link-color) solid;
-    padding-bottom: 10px;
-}
-
-.bu {
-    border-radius: 5rem !important;
-    font-weight: 500 !important;
-}
-
-.checkbu {
-    border-radius: 5rem !important;
-    font-weight: 400 !important;
-    position: absolute !important;
-    right: 8px;
-    top: 11px;
-    font-size: 15px !important;
-}
-
-.confpass,
-.email,
-.password,
-.name {
-    border: 1px solid var(--input-border-color) !important;
-    box-shadow: none !important;
-    background-image: none !important;
-}
-
-#dropdown {
-    border-color: var(--input-border-color);
-    padding-right: calc(0.75rem) !important;
-    --bs-form-select-bg-icon: none !important;
-    background-repeat: no-repeat !important;
-    background-position: none !important;
-    background-size: none !important;
-    border-top-right-radius: var(--bs-border-radius);
-    border-bottom-right-radius: var(--bs-border-radius);
-}
-
-h6 {
-    align-self: flex-start;
-    margin-left: 3.7rem !important;
-    line-height: 1px;
-    font-family: serif, monospace, Helvetica, Arial;
-}
-
-.forgotPass {
-    align-self: flex-end;
-    margin-right: 3.7rem !important;
-    margin-top: 0.4rem !important;
-}
-
-.forget {
-    opacity: 0.5 !important;
-    transition: all 200ms ease-out;
-    color: black;
-    text-decoration: none;
-}
-
-.forget:hover {
-    opacity: 1 !important;
-}
-
-.forlogin {
-    margin-top: 7.5rem !important;
-    border-bottom: 0px solid var(--hover-color);
-    transition: all 50ms ease-in;
-    padding-bottom: 7px;
-    cursor: pointer;
-}
-
-.forlogin:hover {
-    padding-bottom: 2px;
-    border-bottom: 1px solid var(--hover-color);
-    cursor: pointer;
-}
-
-.fforlogin {
-    margin-top: 6.8rem !important;
-    border-bottom: 0px solid var(--hover-color);
-    transition: all 50ms ease-in;
-    padding-bottom: 7px;
-    cursor: pointer;
-}
-
-.fforlogin:hover {
-    padding-bottom: 2px;
-    border-bottom: 1px solid var(--hover-color);
-    cursor: pointer;
-}
-
-.formainnn {
-    box-shadow: 1px 2px 71px -6px var(--shadow-color);
-    height: 350px;
-    opacity: 0;
-    transition: opacity 100ms ease-in;
+.input-group {
     display: flex;
-    background-color: var(--body-bg);
+    align-items: center;
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.loginspace {
-    margin-top: 2.7rem;
-    margin-right: 1rem;
-    margin-bottom: 0.4rem;
-    color: var(--body-color) !important;
+.form-floating .form-control {
+    border-radius: 10px;
+    padding: 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
 }
 
-.loginnspace {
-    margin-top: 2.1rem;
-    align-self: end;
-    margin-right: 1rem;
+.form-floating .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px var(--primary-color);
 }
 
-#date {
-    border-color: var(--input-border-color);
-    padding-right: calc(0.75rem) !important;
-    background-image: none !important;
-    background-repeat: no-repeat !important;
-    background-position: none !important;
-    background-size: none !important;
-    border-top-left-radius: var(--bs-border-radius);
-    border-bottom-left-radius: var(--bs-border-radius);
+.form-floating label {
+    padding-left: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-color-muted);
+}
+
+input::placeholder {
+    animation: fadeInPlaceholder 1s ease-in-out;
+    color: var(--text-color-muted);
+    font-size: 1rem;
+}
+
+@keyframes fadeInPlaceholder {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+}
+
+.btn:hover {
+    background-color: var(--button-hover-bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px var(--shadow-color);
+}
+
+.footer {
+    font-size: 0.875rem;
+    color: var(--text-color-muted);
+    text-align: center;
+    margin-top: 2rem;
 }

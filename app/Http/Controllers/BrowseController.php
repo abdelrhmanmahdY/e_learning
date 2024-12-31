@@ -42,18 +42,18 @@ class BrowseController extends Controller
         // if (!Gate::allows('isAdmin')) {
         //     abort(404);
         // }
-        $userId = auth()->id(); // it is working to get the user id, don't delete it
+        $userId = auth()->id(); 
         $hasPurchased = Purchase::where('user_id', $userId) 
             ->where('book_id', $book->id)
             ->exists();
 
-        // Check if the user has a reservation with status 'still'
+     
         $hasReserved = Reservation::where('user_id', $userId)
             ->where('book_id', $book->id)
             ->where('status', 'still')
             ->exists();
 
-        // Check if this is the first reservation with status 'still'
+       
         $isFirstReservation = Reservation::where('book_id', $book->id)
             ->where('status', 'still')
             ->orderBy('reservation_date', 'asc')
@@ -67,10 +67,11 @@ class BrowseController extends Controller
 
         $isReserved = Reservation::where('book_id', $book->id)->exists();
 
+        $lastBorrowRecord = Borrows::where('book_id', $book->id)->latest()->first();
+        $isBorrowed = $lastBorrowRecord && $lastBorrowRecord->return_at === null;
 
 
-
-        return view('browse.show', compact('book', 'hasPurchased', 'isUserFirstReservation', 'isReservedDone', 'isReserved', 'hasReserved'));
+        return view('browse.show', compact('book', 'hasPurchased', 'isUserFirstReservation', 'isReservedDone', 'isReserved', 'hasReserved', 'isBorrowed'));
     }
     public function store(Request $request)
     {
@@ -91,26 +92,45 @@ class BrowseController extends Controller
             Log::info('Decrypted book_id: ' . $bookId);
 
             $book = Book::findOrFail($bookId);
+      
             if (!$book->availability) {
                 return back()->withErrors(['book_id' => 'This book is currently unavailable for borrowing.']);
             }
 
-            // Create the borrow record
+           
             $borrow = new Borrows();
             $borrow->user_id = $userId;
             $borrow->book_id = $bookId;
             $borrow->borrow_date = $request->borrow_date;
-            $borrow->due_date = date('Y-m-d', strtotime($request->borrow_date . ' +7 days')); // Example due date logic
+            $borrow->due_date = date('Y-m-d', strtotime($request->borrow_date . ' +7 days')); 
             $borrow->save();
 
             Log::info('Borrow record saved: ' . $borrow->id);
-
-            // Update book availability
             $book->availability = false;
             $book->save();
 
             return redirect()->route('browse.index')->with('success', 'Book borrowed successfully!');
-        } else if ($request->get('submit') == 'purchies') {
+        }
+        else if ($request->get('submit') == 'returnbook') {
+            $validatedData = $request->validate([
+                'book_id' => 'required',
+            ]);
+        
+            $bookId = decrypt($validatedData['book_id']);
+         
+        
+            $lastBorrowRecord->returned_at = now();
+            $lastBorrowRecord->save();
+        
+            $book = Book::findOrFail($bookId);
+            $book->availability = 1;
+            $book->save();
+        
+            return redirect()->route('browse.index')
+                ->with('success', 'Book returned successfully!');
+        }
+         
+        else if ($request->get('submit') == 'purchies') {
             $validatedData = $request->validate([
                 'user_id' => 'required',
                 'book_id' => 'required',
@@ -118,15 +138,10 @@ class BrowseController extends Controller
 
             $userId = decrypt($validatedData['user_id']);
             $bookId = decrypt($validatedData['book_id']);
-
             $book = Book::findOrFail($bookId);
-
-            // Create the purchase record
             $purchase = new Purchase();
             $purchase->user_id = $userId;
             $purchase->book_id = $bookId;
-
-
             $reservation = Reservation::where('user_id', $userId)
                 ->where('book_id', $bookId)
                 ->where('status', 'still')
@@ -137,15 +152,11 @@ class BrowseController extends Controller
                 $reservation->status = "done";
                 $reservation->save();
             }
-
+            $purchase->purchase_date = now();
             $purchase->save();
 
             $book->availability = 0;
             $book->save();
-
-
-
-
             return redirect()->route('browse.show', ['id' => $bookId])->with('success', 'Book purchased successfully!');
         } else if ($request->get('submit') == 'reserve') {
             $validatedData = $request->validate([
@@ -158,18 +169,20 @@ class BrowseController extends Controller
 
             $book = Book::findOrFail($bookId);
 
+
             // Create the reservation record
             $reservation = new Reservation();
             $reservation->user_id = $userId;
             $reservation->book_id = $bookId;
             $reservation->status =  "still";
-
+            $reservation->reservation_date = now(); 
             $reservation->save();
-
+           
             Log::info('Reservation record saved: ' . $reservation->id);
 
             return redirect()->route('browse.show', ['id' => $bookId])->with('success', 'Book reserved successfully!');
         }
+
     }
     // public function destroy(Request $request, $id)
     // {    $borrow->user()->detach();

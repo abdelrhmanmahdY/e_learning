@@ -92,24 +92,26 @@
 
                         </button>
 
-                        @foreach ($user->penalties as $penalty)
-                            @if ($penalty->severity_level === 'HIGH')
-                                <style>
-                                    .user-name-circle::before {
-                                        background-color: red;
-                                    }
-                                </style>
-                            @break
+                       
+                        @php
+        $color = '';
+        if ($user->hasPenalty('2')) {
+            $color = 'red';
+        } elseif ($user->hasPenalty('1')) {
+            $color = 'orange';
+            if ($user->hasPenalty('2')) {
+                $color = 'red'; 
+            }
+        }
+    @endphp
 
-                        @elseif ($penalty->severity_level === 'LOW')
-                            <style>
-                                .user-name-circle::before {
-                                    background-color: orange;
-                                }
-                            </style>
-                        @endif
-                    @endforeach
-                    <b class="user-name-circle">{{ $user->name }}</b>
+    <style>
+        .user-name-circle-{{ $user->id }}::before {
+            background-color: {{ $color }};
+        }
+    </style>
+
+    <b class="user-name-circle user-name-circle-{{ $user->id }}">{{ $user->name }}</b>
                     <x-modal name="{{ $user->name }}-info">
                         <x-table>
                             <x-slot name="tableHead">
@@ -210,38 +212,44 @@
 
                     </x-modal>
                     <x-modal name="{{ $user->name }}-penalties" class="w-full max-w-2xl mx-auto">
-                        <form action="" method="post" id="penaltyDeleteForm" class="p-10">
-                            @csrf
-                            @method('DELETE')
-                            <x-table>
-                                <x-slot name="tableHead">
-                                    <th>Select</th>
-                                    <th>Penalty Type</th>
-                                    <th>Block's Time</th>
-                                </x-slot>
-                                <x-slot name="tableBody">
-                                    @foreach ($user->penalties as $penalty)
-                                        <td>
-                                            <input type="checkbox" name="penalty_ids[]"
-                                                value="{{ $penalty->id }}" class="form-checkbox">
-                                        </td>
-                                        <td>{{ $penalty->penalty_type }}</td>
-                                        <td>{{ $penalty->duration }}</td>
-                                    @endforeach
-                                </x-slot>
-                            </x-table>
+                    <form action="{{ route('user.destroyPenalty', ['user' => $user->id]) }}" method="post" class="p-10">
+    @csrf
+    <x-table>
+        <x-slot name="tableHead">
+            <tr>
+                <th>Select</th>
+                <th>Penalty Type</th>
+                <th>Block's Time</th>
+            </tr>
+        </x-slot>
+        <x-slot name="tableBody">
+            @foreach ($user->penalties as $penalty)
+            <tr>
+                <td>
+                    <input type="checkbox" name="penalty_ids[]" value="{{ $penalty->id }}" class="form-checkbox">
+                </td>
+                <td>{{ $penalty->penalty_type }}</td>
+                <td>{{ $penalty->duration }}</td>
+            </tr>
+            @endforeach
+        </x-slot>
+    </x-table>
+    <div class="d-flex justify-content-center mt-4">
+        <button class="btn btn-danger mb-4">Delete</button>
+    </div>
+</form>
 
-                        </form>
                         <div class="mt-4">
-                            <<<<<<< HEAD <form action=" {{ route('user.addPenalty', ['user' => $user->id]) }}"
+                            <form action=" {{ route('user.addPenalty', ['user' => $user->id]) }}"
                                 method="post" id="penaltyAddForm">
                                 @csrf
                                 <select name="penalty_id" class="form-select" required>
                                     <option value="">Select Penalty</option>
-                                    @foreach ($penalties as $penalty)
-                                        <option value="{{ $penalty->id }}">{{ $penalty->severity_level }}
+                                   
+                                        <option value="1">LOW
                                         </option>
-                                    @endforeach
+                                        <option value="2">HIGH
+                                        </option>
                                 </select>
 
 
@@ -249,13 +257,13 @@
 
                         </div>
                         <div class="d-flex justify-content-center mt-4">
-
+                        <button  class="btn btn-primary   mb-4">Add</button>
 
 
                         </div>
 
                         </form>
-                        <button form="penaltyAddForm" class="btn btn-primary   mb-4">Add</button>
+                       
 
                         <!-- <form action="" method="post" id="penaltyAddForm">
 =======
