@@ -76,7 +76,6 @@ body {
 .user-name-circle {
     position: relative;
     display: inline-block;
-    padding-left: 30px;
     color: var(--text-color-dark);
     font-size: 1.2rem;
     font-weight: bold;

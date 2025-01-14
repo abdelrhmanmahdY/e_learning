@@ -2,6 +2,9 @@
     <x-slot name="slot">
         <main>
             <section class="background">
+            @if (session('success'))
+                <strong class="text-center mb-2 alert alert-danger container d-block">you have panelty</strong>
+                @endif
                 <div class="most container">
                     <h1 class=" ms-3 h1borrowed">Most Borrowed Books</h1>
                     <div class="container text-center mt-5 d-flex justify-content-center">
@@ -12,10 +15,11 @@
     background-position: center;
     background-size: cover;
 ">
-                                </div>
+                               </div>
                             @empty
                                 <p class="col-12">You haven't borrowed any books yet</p>
                             @endforelse
+                            
                         </div>
                     </div>
                 </div>
@@ -28,7 +32,7 @@
                         <div class="row row-cols-3 analize  gap-5">
                             @forelse ($mostPurchasedBooks as $mostpurchase)
                                 <div class=" col rounded book-shape d-flex flex-wrap justify-content-center  "
-                                    style="background-image:url(data:image/jpeg;base64,{{ base64_encode($mostpurchase->photo) }});background-repeat: no-repeat;
+                                style="background-image:url(data:image/jpeg;base64,{{ base64_encode($mostpurchase->photo) }});background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 ">

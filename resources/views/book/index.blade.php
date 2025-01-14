@@ -75,20 +75,19 @@
         </x-modal>
     </x-slot>
     <x-slot name='slot'>
-        <div class="container text-center mt-3 d-flex justify-content-center">
-            <div class="row  ms-5  gap-5">
-                @foreach ($books as $book)
-                    <button x-data=''
-                        x-on:click.prevent="$dispatch('open-modal',
-                '{{ $book->title }}-info')"
-                        class=" col rounded book-shape d-flex flex-wrapa justify-content-center"
-                        style="background-image:url(data:image/jpeg;base64,{{ base64_encode($book->photo) }});background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
- ">
-
-
-                    </button>
+    <div class="container text-center mt-3 d-flex justify-content-center">
+    <div class="row ms-5 gap-5">
+        @foreach ($books as $book)
+            <button x-data=''
+                    x-on:click.prevent="$dispatch('open-modal', '{{ $book->title }}-info')"
+                    class="col rounded book-shape d-flex flex-wrap justify-content-center"
+                    style="background-image:url(data:image/jpeg;base64,{{ base64_encode($book->photo) }});background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: cover;
+                    position: relative;">
+                <b style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: white; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);">{{ $book->title }}</b>
+            </button>
+                    
                     <x-modal name="{{ $book->title }}-info">
 
                         <x-table>
@@ -101,7 +100,7 @@
                                 <th>Price</th>
 
                             </x-slot>
-                            <x-slot name="tableBody">
+                           <x-slot name="tableBody">
                                 <td>{{ $book->title }}</td>
                                 <td>{{ $book->author }}</td>
                                 <td>{{ $book->category }}</td>

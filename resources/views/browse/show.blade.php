@@ -30,6 +30,14 @@
                                     <button class="btn " style="background-color:rgb(7, 219, 247);color:white;">Start
                                         Read</button>
                                 </form>
+                            @elseif ($remainingTime&&!$borrow->returned_at)
+                            <form action="{{ route('pdf.index') }}" method="get">
+                                    @csrf
+                                    <input type="hidden" name="pdf_url" value="{{ encrypt($book->pdf_url) }}">
+
+                                    <button class="btn " style="background-color:rgb(7, 219, 247);color:white;">Start
+                                        Read</button>
+                                </form> 
                             @elseif ($isUserFirstReservation)
                                 @if ($book->purchase_price > 0 && $book->availability)
                                     <form action="{{ route('browse.store') }}" method="post">
@@ -60,6 +68,7 @@
                                     </div>
                                 @endif
                             @elseif($hasReserved)
+                            
                                 <div class="d-flex justify-content-center">
                                     <div class="alert alert-success p-1 w-50 text-center" style="margin: 0;padding:0;">
                                         Reservation Done Successful, Please wait in Waiting Line
@@ -101,16 +110,16 @@
                                         style="background-color:rgb(7, 219, 247);color:white">Reserve</button>
                                 </form>
                             @endif
-                          @if($isBorrowed)
+                            @if($isBorrowed&&Gate::allows('isAdmin')&&!$last->returned_at)
     
-                          <form action="{{ route('browse.store') }}" method="post">
-    @csrf
-    <input type="hidden" name="user_id" value="{{ encrypt(Auth::user()->id) }}">
-    <input type="hidden" name="book_id" value="{{ encrypt($book->id) }}">
-    <button type="submit" name="submit" value="returnbook" class="btn btn-warning" style="margin:10px;">Return</button>
+    <form action="{{ route('browse.store') }}" method="post">
+@csrf
+<input type="hidden" name="user_id" value="{{ encrypt(Auth::user()->id) }}">
+<input type="hidden" name="book_id" value="{{ encrypt($book->id) }}">
+<button type="submit" name="submit" value="returnbook" class="btn btn-warning" style="margin:10px;">Return</button>
 </form>
 
-    @endif
+@endif
                         </div>
                     </div>
                     <div>

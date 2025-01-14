@@ -85,7 +85,7 @@
                                 <img src="data:image/jpeg;base64,{{ $user->photo }}" alt="{{ $user->name }}'s Photo"
                                     style="width:150px;height:150px" class="card-img-top rounded-circle">
                             @else
-                                <img src="{{ asset('../resources/img/download.jpg') }}" style="width:150px;height:150px"
+                                <img src="{{ asset('../resources/img/user.avif') }}" style="width:150px;height:150px"
                                     class="card-img-top rounded-circle" />
                             @endif
 
@@ -178,8 +178,8 @@
                                 <x-slot name="tableHead">
                                     <th>Name</th>
                                     <th>Email</th>
+                                    <th>password</th>
                                     <th>Role</th>
-
                                     <th>image</th>
                                 </x-slot>
                                 <x-slot name="tableBody">
@@ -187,7 +187,8 @@
                                             value="{{ $user->name }}" class="form-control" required /></td>
                                     <td><x-text-input class="form-control" id="email" name="email"
                                             value="{{ $user->email }}" class="form-control" required /></td>
-
+                                            <td><x-text-input class="form-control" id="password" name="password"
+                                             class="form-control"  /></td>
                                     <td><select class="form-control" id="roles" name="role[]"
                                             style="width:120px; height:40px">
                                             @foreach ($roles as $role)

@@ -62,6 +62,11 @@
             </div>
             <x-text-input id="photo" name="photo" type="file" class="mt-1 block w-full" accept="image/*" />
             <x-input-error class="mt-2" :messages="$errors->get('photo')" />
+            <a href="#" onclick="event.preventDefault(); document.getElementById('delete-photo').value='1'; document.getElementById('photo-form').submit();"
+                    class="btn btn-danger btn-sm">
+                    {{ __('Delete Profile Picture') }}
+                </a>
+            <input type="hidden" id="delete-photo" name="delete_photo" value="0">
         </div>
 
         <div class="flex items-center gap-4">

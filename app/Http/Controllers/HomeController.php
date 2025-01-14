@@ -14,10 +14,10 @@ class HomeController extends Controller
     public function index()
     {
         // Get the top 3 most borrowed books
-        $mostBorrowedBooks = Book::select('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price')
+        $mostBorrowedBooks = Book::select('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price','books.photo')
             ->join('borrows', 'books.id', '=', 'borrows.book_id')
             ->selectRaw('count(borrows.id) as borrow_count')
-            ->groupBy('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price')
+            ->groupBy('books.id', 'books.title', 'books.author', 'books.category', 'books.availability', 'books.pdf_url', 'books.purchase_price','books.photo')
             ->orderByDesc('borrow_count')
             ->take(3)
             ->get();

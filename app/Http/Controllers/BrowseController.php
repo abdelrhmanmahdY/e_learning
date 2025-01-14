@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use Carbon\Carbon;
 
 use App\Models\Borrows;
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Gate;
@@ -37,12 +39,15 @@ class BrowseController extends Controller
     }
 
     public function show(Request $request)
-    {
+    { 
         $book = Book::findOrFail($request->id);
         // if (!Gate::allows('isAdmin')) {
         //     abort(404);
         // }
-        $userId = auth()->id(); 
+        $userId = auth()->id();
+         $user=User::findOrFail($userId);
+         if($user->hasPenalty('2')){redirect()->route('home')->with('error', 'high penalties.');}
+         
         $hasPurchased = Purchase::where('user_id', $userId) 
             ->where('book_id', $book->id)
             ->exists();
@@ -70,19 +75,45 @@ class BrowseController extends Controller
         $lastBorrowRecord = Borrows::where('book_id', $book->id)->latest()->first();
         $isBorrowed = $lastBorrowRecord && $lastBorrowRecord->return_at === null;
 
+        $borrow = Borrows::where('user_id', $userId)
+        ->where('book_id', $book->id)
+        ->latest()
+        ->first();
+        $last = Borrows::where('book_id', $book->id)
+        ->latest()
+        ->first();
 
-        return view('browse.show', compact('book', 'hasPurchased', 'isUserFirstReservation', 'isReservedDone', 'isReserved', 'hasReserved', 'isBorrowed'));
+        
+        $book = Book::findOrFail($book->id);
+        $remainingTime = null;
+        if ($borrow && $borrow->due_date && !$borrow->return_at) {
+        $returnedAt = Carbon::parse($borrow->due_date);
+        $now = Carbon::now();
+
+        // Calculate the difference and ensure it's not negative
+        $remainingTime = $returnedAt->diffForHumans($now, ['syntax' => Carbon::DIFF_ABSOLUTE]);
+        
+        }
+
+
+        return view('browse.show', compact('book', 'last','remainingTime','borrow','hasPurchased', 'isUserFirstReservation', 'isReservedDone', 'isReserved', 'hasReserved', 'isBorrowed'));
     }
+
     public function store(Request $request)
     {
         Log::info('Request data: ', $request->all());
+        
         if ($request->get('submit') == 'borrow') {
             $validatedData = $request->validate([
                 'user_id' => 'required',
                 'book_id' => 'required',
                 'borrow_date' => 'required|date|after_or_equal:today',
             ]);
-
+            $userI = auth()->id();
+            $use=User::findOrFail($userI);
+            if($use->hasPenalty('1')){
+                redirect()->route('home')->with('error', 'low penalties.');
+            }
             Log::info('Validated data: ', $validatedData);
 
             $userId = decrypt($validatedData['user_id']);
@@ -110,14 +141,19 @@ class BrowseController extends Controller
             $book->save();
 
             return redirect()->route('browse.index')->with('success', 'Book borrowed successfully!');
-        }
-        else if ($request->get('submit') == 'returnbook') {
+        } else if ($request->get('submit') == 'returnbook') {
             $validatedData = $request->validate([
                 'book_id' => 'required',
             ]);
-        
+            $userI = auth()->id();
+            $use=User::findOrFail($userI);
+            if($use->hasPenalty('1')){redirect()->route('home')->with('error', 'low penalties.');}
             $bookId = decrypt($validatedData['book_id']);
-         
+            $lastBorrowRecord = Borrows::where('book_id', $bookId)->latest()->first();
+        
+            if (!$lastBorrowRecord) {
+                return back()->withErrors(['book_id' => 'No borrow record found for this book.']);
+            }
         
             $lastBorrowRecord->returned_at = now();
             $lastBorrowRecord->save();
@@ -130,6 +166,7 @@ class BrowseController extends Controller
                 ->with('success', 'Book returned successfully!');
         }
          
+       
         else if ($request->get('submit') == 'purchies') {
             $validatedData = $request->validate([
                 'user_id' => 'required',
@@ -163,14 +200,16 @@ class BrowseController extends Controller
                 'user_id' => 'required',
                 'book_id' => 'required',
             ]);
-
+            $userI = auth()->id();
+            $use=User::findOrFail($userI);
+            if($use->hasPenalty('1')){redirect()->route('home')->with('error', 'low penalties.');}
             $userId = decrypt($validatedData['user_id']);
             $bookId = decrypt($validatedData['book_id']);
 
             $book = Book::findOrFail($bookId);
 
 
-            // Create the reservation record
+            
             $reservation = new Reservation();
             $reservation->user_id = $userId;
             $reservation->book_id = $bookId;
@@ -184,33 +223,4 @@ class BrowseController extends Controller
         }
 
     }
-    // public function destroy(Request $request, $id)
-    // {    $borrow->user()->detach();
-    //     $borrow->book()->detach();
-    //     $borrow->delete();
-    //     return redirect()->route('borrows.index')->with('success', 'Borrow deleted successfully');
-    // }
-
-
-    // public function update(Request $request, $id)
-    // {
-
-    //     $request->validate([
-    //         'user_id' => 'required|exists:users,id',
-    //         'book_id' => 'required|exists:books,id',
-    //         'borrow_date' => 'required|date',
-    //         'due_date' => 'required|date',
-    //     ]);
-
-    //     $borrow = new Borrow();
-    //     $borrow->user_id = $request->user_id;
-    //     $borrow->book_id = $request->book_id;
-    //     $borrow->borrow_date = $request->borrow_date;
-    //     $borrow->due_date = $request->due_date;
-
-    //     $borrow->save();
-    //     $borrow->user()->attach($request->user_id);
-    //     $borrow->book()->attach($borrow->book_id );
-    //     return redirect()->route('borrows.index')->with('success', 'Borrow updated successfully');
-    // }
 }

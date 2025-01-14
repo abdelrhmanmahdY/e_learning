@@ -30,15 +30,17 @@ class ProfileController extends Controller
         $request->user()->fill($request->validated());
 
         if ($request->hasFile('photo')) {
-            if ($request->user()->photo) {
-                Storage::disk('public')->delete($request->user()->photo);
-            }
-            $photoPath = $request->file('photo')->store('photos', 'public');
-            $request->user()->photo = $photoPath;
+            $file = $request->file('photo');
+            $imageData = file_get_contents($file);
+            $request->user()->photo = $imageData;
         }
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
+        }
+                if ($request->input('delete_photo') == '1' ) 
+        { 
+            $request->user()->photo = null ; 
         }
 
         $request->user()->save();

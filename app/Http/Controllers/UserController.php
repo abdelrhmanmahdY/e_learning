@@ -125,6 +125,7 @@ class UserController extends Controller
         } else {
 
             $user->roles()->detach();
+            
             $user->delete();
             return redirect()->route('user.index')->with('success', 'User deleted successfully!');
         }
@@ -141,7 +142,7 @@ class UserController extends Controller
             'penalty_id' => 'required|exists:penalties,id',
         ]);
 
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($id);// Check if the user has the "student" role
         if ($user->hasPenalty($validatedData['penalty_id'])) {
             return redirect()->back()->with('error', 'student already have Penalty.');
         }

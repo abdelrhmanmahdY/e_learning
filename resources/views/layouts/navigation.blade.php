@@ -13,8 +13,8 @@
                 <!-- Navigation Links -->
                 @if (Auth::check() && Auth::user()->hasRole('Admin'))
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
+                            {{ __('browse') }}
                         </x-nav-link>
                         <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
                             {{ __('Users') }}
@@ -35,7 +35,7 @@
                         <img class='rounded-circle' style="width:50px;height:50px"
                             src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}" alt="">
                     @else
-                    <img src="{{ asset('../resources/img/download.jpg') }}" style="width:150px;height:150px"
+                    <img src="{{ asset('../resources/img/user.avif') }}" 
                     class="card-img-top rounded-circle" />
                     @endif
                 </div>
@@ -94,9 +94,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+        
             <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
                 {{ __('Users') }}
             </x-responsive-nav-link>

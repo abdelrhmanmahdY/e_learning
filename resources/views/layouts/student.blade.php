@@ -41,8 +41,8 @@
                         <a class="nav-link active" aria-current="page" href="{{ route('browse.index') }}">Browse</a>
                     </li>
                     @if (Auth::check() && Auth::user()->hasRole('Admin'))
-                        <li><a href="{{ url('/dashboard') }}" class="nav-link active">
-                                Dashboard
+                        <li><a href="{{ url('user') }}" class="nav-link active">
+                                user
                             </a></li>
                     @endif
 
@@ -66,7 +66,7 @@
                                         src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->photo) }}"
                                         alt="User Photo" />
                                 @else
-                                <img src="{{ asset('../resources/img/download.jpg') }}" style="width:150px;height:150px"
+                                <img src="{{ asset('../resources/img/user.avif') }}" 
                                 class="card-img-top rounded-circle" />
                                 @endif
                             </div>

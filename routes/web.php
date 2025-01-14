@@ -19,9 +19,6 @@ Route::get('/browse', [BrowseController::class, 'index'])->name('browse.index');
 Route::get('/browse/{id}', [BrowseController::class, 'show'])->name('browse.show');
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/pdf', function (Request $request) {
     $pdf = decrypt($request->pdf_url);

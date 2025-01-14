@@ -111,8 +111,8 @@ h3 {
 }
 
 .book-shape {
-    width: 7em;
-    height: 10em;
+    width: 5em;
+    height: 8em;
     background-color: var(--accent-color);
     max-width: 100%;
     border-radius: 10px;
@@ -144,29 +144,29 @@ h3 {
 
 @media (max-width: 380px) {
     .book-shape {
-        width: 6em;
-        height: 9em;
+        width: 4em;
+        height: 7em;
     }
 }
 
 @media (min-width: 576px) {
     .book-shape {
-        width: 9em;
-        height: 14em;
+        width: 8em;
+        height: 12em;
     }
 }
 
 @media (min-width: 768px) {
     .book-shape {
-        width: 13em;
-        height: 18em;
+        width: 12em;
+        height: 17em;
     }
 }
 
 @media (min-width: 992px) {
     .book-shape {
-        width: 18em;
-        height: 23em;
+        width: 17em;
+        height: 22em;
     }
 }
 
